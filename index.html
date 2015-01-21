@@ -42,6 +42,8 @@
       <div class="content">
         <h1 id='introduo'>Introdução</h1>
 <p>O SDK da Stone para Android oferece uma forma simples e rápida para iniciar sua integração. Com o SDK é possível integrar um dispositivo com bluetooth e Android 2.3 ou superior com o serviço Stone. Para isso, basta importar as bibliotecas <code class="prettyprint">XStream</code> e <code class="prettyprint">sdkstoneapplication.jar</code> em seu projeto.</p>
+
+<p>Você poderá fazer o download do SDK, XStream e do código de exemplo no repositório android-sdk da Stone no Github: <a href="https://github.com/stone-pagamentos/sdk-android">android-sdk</a></p>
 <h1 id='integrao'>Integração</h1><h2 id='envio-da-transao'>Envio da transação</h2><pre><code class="highlight java"><span class="n">StartTransaction</span><span class="o">.</span><span class="na">sendTransactionToStoneApplication</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span>
                                                    <span class="n">amount</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">(),</span>
                                                    <span class="n">getChecked</span><span class="o">(),</span>
