@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp" >
+
+    <View
+        android:id="@+id/middleScreen"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <Button
+        android:id="@+id/cancellationButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/transationButton"
+        android:layout_centerVertical="true"
+        android:text="Cancelamento" />
+
+    <Button
+        android:id="@+id/transationButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cancellationButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Transação" />
+
+    <Button
+        android:id="@+id/ecommerceButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/cancellationButton"
+        android:layout_marginTop="20dp"
+        android:text="E-Commerce" />
+
+</RelativeLayout>
