@@ -23,7 +23,10 @@ StartTransaction.sendTransactionToStoneApplication(getApplicationContext(),
                                                    getChecked(),
                                                    numberOfParcel,
                                                    parcelType,
-                                                   demand );
+                                                   demand,
+                                                   autoFlagCheckedTextView.isChecked() ? 1 : 2,
+                                                   R.anim.fade_in,
+                                                   R.anim.fade_out );
 ```
 
 O usuário terá uma transação de interface que o levará da sua aplicação para a aplicação da Stone. O SDK faz a comunicação com o aplicativo [Stone Mobile](https://play.google.com/store/apps/details?id=br.com.stone) que, por sua vez, se comunica com o PINPad. O aplicativo está encarregado de avisar quando há ou não uma conexão com algum PINpad. Se o usuário não estiver conectado com nenhum dispositivo, o aplicativo exibirá um botão para buscar e conectar com algum dispositivo.
@@ -73,15 +76,18 @@ O método getExternalInformations() fica responsável por verificar se há ou n�
 
 Essa classe envia uma transação para o aplicativo Stone Mobile.
 
-`void StartTransaction.sendTransactionToStoneApplication(Context context, String amount, Integer typeOfPurchase, Integer numberOfParcels, Integer typeParcels, Integer demandId)`
+`void StartTransaction.sendTransactionToStoneApplication(Context context, String amount, Integer typeOfPurchase, Integer numberOfParcels, Integer typeParcels, Integer demandId, Integer autoTransaction, Integer animation_out, Integer animation_in)`
 
 ```java
-StartTransaction.sendTransactionToStoneApplication(getApplicationContext(),      // contexto
-                                                   amount.getText().toString(),  // valor em centavos
-                                                   getChecked()                  // tipo da transação
-                                                   numberOfParcel,               // número de parcelas
-                                                   parcelType,                   // tipo de parcelas
-                                                   demand);                      // id da transação
+StartTransaction.sendTransactionToStoneApplication(getApplicationContext(),
+                                                   amount.getText().toString(),
+                                                   getChecked(),
+                                                   numberOfParcel,
+                                                   parcelType,
+                                                   demand,
+                                                   autoFlagCheckedTextView.isChecked() ? 1 : 2,
+                                                   R.anim.fade_in,
+                                                   R.anim.fade_out );
 ```
 
 | Tipo | Parâmetro | Descrição |
@@ -91,7 +97,9 @@ StartTransaction.sendTransactionToStoneApplication(getApplicationContext(),     
 | Integer | typeOfPurchase | Tipo da compra (1 para Débito ou 2 para Crédito)  |
 | Integer | numberOfParcels | Número de parcelas (se houve parcerlamento) |
 | Integer | typeOfParcels | Tipo de parcela (0 - à vista, 1 - lojista, 2 - emissor |
-| Integer | demandId | Um identificador da transação |
+| Integer | autoTransaction | Define se a transação será enviada automaticamente - **1** ou se o usuário precisará confirmar a transação no aplicativo Stone - **2**  |
+| Integer | animation_out | Animação de saída do seu aplicativo para o aplicativo Stone - Se não tiver uma animação, o parâmetro deve ser passado como `null` |
+| Integer | animation_in | Animação de volta do aplicativo Stone para seu aplicativo - Se não tiver uma animação, o parâmetro deve ser passado como `null` |
 
 ## StartTypedTransaction
 
