@@ -55,13 +55,13 @@ public class TypedSaleActivity extends Activity implements OnClickListener {
 
 	private void instanceSpinners() {
 		
-		ArrayAdapter<CharSequence> numParcelasAdapter = ArrayAdapter.createFromResource(this, R.array.num_parcelas,
+		ArrayAdapter<CharSequence> numParcelasAdapter = ArrayAdapter.createFromResource(this, R.array.number_installments,
 																						android.R.layout.simple_spinner_item);
 
 		numParcelasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		numberOfParcels.setAdapter(numParcelasAdapter);
 		
-		ArrayAdapter<CharSequence> parcelTypeAdapter = ArrayAdapter.createFromResource(this, R.array.tipo_parcelas,
+		ArrayAdapter<CharSequence> parcelTypeAdapter = ArrayAdapter.createFromResource(this, R.array.type_installment,
 																						android.R.layout.simple_spinner_item);
 
 		parcelTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -77,7 +77,7 @@ public class TypedSaleActivity extends Activity implements OnClickListener {
 																	 amount.getText().toString(), pan.getText().toString(),
 																	 cvv.getText().toString(), date.getText().toString(),
 																	 Integer.parseInt(numberOfParcels.getSelectedItem().toString()),
-																	 GenericMethods.getTypeOfParcel(typeParcels.getSelectedItem().toString()));
+																	 GenericMethods.getTypeOfInstallment(typeParcels.getSelectedItem().toString()));
 		
 	}
 

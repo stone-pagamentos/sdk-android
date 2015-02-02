@@ -17,7 +17,7 @@
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
-                android:layout_height="120dp"
+                android:layout_height="80dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
@@ -50,18 +50,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/tipoParcelamento"
-                android:layout_alignRight="@+id/tipoParcelamento"
-                android:layout_below="@+id/tipoParcelamento"
-                android:layout_marginTop="19dp" />
-
-            <Spinner
-                android:id="@+id/tipoParcelamento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/valorEditText"
                 android:layout_alignRight="@+id/valorEditText"
-                android:layout_below="@+id/radioGroup1"
-                android:layout_marginTop="36dp" />
+                android:layout_below="@+id/tipoParcelamento"
+                android:layout_marginTop="20dp" />
 
             <EditText
                 android:id="@+id/valorEditText"
@@ -78,22 +69,43 @@
                 android:id="@+id/enviarButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_alignLeft="@+id/demandIdEditText"
                 android:layout_alignRight="@+id/demandIdEditText"
                 android:layout_below="@+id/demandIdEditText"
+                android:layout_marginTop="10dp"
                 android:text="ENVIAR" />
 
             <EditText
                 android:id="@+id/demandIdEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="ID do Pedido (opicional)"
                 android:layout_alignLeft="@+id/valorEditText"
                 android:layout_below="@+id/valorEditText"
                 android:layout_marginTop="10dp"
                 android:ems="10"
+                android:hint="ID do Pedido (opicional)"
                 android:inputType="number" />
+
+            <CheckedTextView
+                android:id="@+id/autoFlagCheckedTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tipoParcelamento"
+                android:layout_alignRight="@+id/tipoParcelamento"
+                android:layout_below="@+id/radioGroup1"
+                android:layout_marginTop="20dp"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="left|center_vertical"
+                android:text="Envio automático" />
+
+            <Spinner
+                android:id="@+id/tipoParcelamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/valorEditText"
+                android:layout_alignRight="@+id/valorEditText"
+                android:layout_below="@+id/autoFlagCheckedTextView"
+                android:layout_marginTop="20dp" />
 
         </RelativeLayout>
     </ScrollView>

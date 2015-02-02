@@ -2,7 +2,7 @@ package br.com.stone.utils;
 
 public class GenericMethods {
 	
-	public static int getTypeOfParcel(String type){
+	public static int getTypeOfInstallment(String type){
 		int typeParcel = 0; // default is "À VISTA"
 		
 		switch (type) {

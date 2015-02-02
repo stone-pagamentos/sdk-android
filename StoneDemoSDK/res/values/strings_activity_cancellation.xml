@@ -2,6 +2,7 @@
 
     <string name="title_activity_cancellation">Cancelamento</string>
     <string name="title_activity_typed">Venda Digitada</string>
+    <string name="title_activity_connection">Conexão com o Pinpad</string>
 
 
 </resources>
