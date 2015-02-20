@@ -44,12 +44,20 @@
 <p>O SDK da Stone para Android oferece uma forma simples e rápida para iniciar sua integração. Com o SDK é possível integrar um dispositivo com bluetooth e Android 2.3 ou superior com o serviço Stone. Para isso, basta importar as bibliotecas <code class="prettyprint">XStream</code> e <code class="prettyprint">sdkstoneapplication.jar</code> em seu projeto.</p>
 
 <p>Você poderá fazer o download do SDK, XStream e do código de exemplo no repositório android-sdk da Stone no Github: <a href="https://github.com/stone-pagamentos/sdk-android">android-sdk</a></p>
-<h1 id='integrao'>Integração</h1><h2 id='envio-da-transao'>Envio da transação</h2><pre><code class="highlight java"><span class="n">StartTransaction</span><span class="o">.</span><span class="na">sendTransactionToStoneApplication</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span>
+<h1 id='integrao'>Integração</h1><h2 id='envio-da-transao'>Envio da transação</h2>
+<aside class="warning">O método `sendTransactionToStoneApplication` está obsoleto e será removido em versões futuras</aside>
+<pre><code class="highlight java"><span class="nd">@deprecated</span>
+<span class="n">StartTransaction</span><span class="o">.</span><span class="na">sendTransactionToStoneApplication</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span>
                                                    <span class="n">amount</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">(),</span>
                                                    <span class="n">getChecked</span><span class="o">(),</span>
                                                    <span class="n">numberOfParcel</span><span class="o">,</span>
                                                    <span class="n">parcelType</span><span class="o">,</span>
-                                                   <span class="n">demand</span> <span class="o">);</span>
+                                                   <span class="n">demand</span><span class="o">,</span>
+                                                   <span class="n">autoFlagCheckedTextView</span><span class="o">.</span><span class="na">isChecked</span><span class="o">()</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">2</span><span class="o">,</span>
+                                                   <span class="n">R</span><span class="o">.</span><span class="na">anim</span><span class="o">.</span><span class="na">fade_in</span><span class="o">,</span>
+                                                   <span class="n">R</span><span class="o">.</span><span class="na">anim</span><span class="o">.</span><span class="na">fade_out</span> <span class="o">);</span>
+</code></pre>
+<pre><code class="highlight java"><span class="n">StartTransaction</span><span class="o">.</span><span class="na">startNewTransaction</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">mTransaction</span><span class="o">,</span> <span class="n">animStart</span><span class="o">,</span> <span class="n">animEnd</span><span class="o">);</span>
 </code></pre>
 
 <p>O usuário terá uma transação de interface que o levará da sua aplicação para a aplicação da Stone. O SDK faz a comunicação com o aplicativo <a href="https://play.google.com/store/apps/details?id=br.com.stone">Stone Mobile</a> que, por sua vez, se comunica com o PINPad. O aplicativo está encarregado de avisar quando há ou não uma conexão com algum PINpad. Se o usuário não estiver conectado com nenhum dispositivo, o aplicativo exibirá um botão para buscar e conectar com algum dispositivo.</p>
@@ -105,13 +113,11 @@ OBS: Lembrando que se o aplicativo da Stone for fechado, a conexão será interr
 <h2 id='starttransaction'>StartTransaction</h2>
 <p>Essa classe envia uma transação para o aplicativo Stone Mobile.</p>
 
-<p><code class="prettyprint">void StartTransaction.sendTransactionToStoneApplication(Context context, String amount, Integer typeOfPurchase, Integer numberOfParcels, Integer typeParcels, Integer demandId)</code></p>
-<pre><code class="highlight java"><span class="n">StartTransaction</span><span class="o">.</span><span class="na">sendTransactionToStoneApplication</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span>      <span class="c1">// contexto</span>
-                                                   <span class="n">amount</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">(),</span>  <span class="c1">// valor em centavos</span>
-                                                   <span class="n">getChecked</span><span class="o">()</span>                  <span class="c1">// tipo da transação</span>
-                                                   <span class="n">numberOfParcel</span><span class="o">,</span>               <span class="c1">// número de parcelas</span>
-                                                   <span class="n">parcelType</span><span class="o">,</span>                   <span class="c1">// tipo de parcelas</span>
-                                                   <span class="n">demand</span><span class="o">);</span>                      <span class="c1">// id da transação</span>
+<p><code class="prettyprint">void StartTransaction.startNewTransaction(Activity activity, Transaction transaction, Integer animStart, Integer animEnd);</code></p>
+<pre><code class="highlight java"><span class="n">StartTransaction</span><span class="o">.</span><span class="na">startNewTransaction</span><span class="o">(</span><span class="k">this</span><span class="o">,</span>
+                                     <span class="n">mTransaction</span><span class="o">,</span>
+                                     <span class="n">animStart</span><span class="o">,</span>
+                                     <span class="n">animEnd</span><span class="o">);</span>
 </code></pre>
 
 <table><thead>
@@ -127,29 +133,51 @@ OBS: Lembrando que se o aplicativo da Stone for fechado, a conexão será interr
 <td>Contexto da aplicação</td>
 </tr>
 <tr>
-<td>String</td>
-<td>amount</td>
-<td>Valor da transação <strong>em centavos</strong></td>
+<td>Transaction</td>
+<td>Transaction</td>
+<td>Dados da transação</td>
 </tr>
 <tr>
 <td>Integer</td>
-<td>typeOfPurchase</td>
-<td>Tipo da compra (1 para Débito ou 2 para Crédito)</td>
+<td>animStart</td>
+<td>Animação inicial</td>
 </tr>
 <tr>
 <td>Integer</td>
-<td>numberOfParcels</td>
-<td>Número de parcelas (se houve parcerlamento)</td>
+<td>animEnd</td>
+<td>Animação final</td>
+</tr>
+</tbody></table>
+<h3 id='transaction'>Transaction</h3>
+<table><thead>
+<tr>
+<th>Método</th>
+<th>Descrição</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>setAmount(String amount)</td>
+<td>Define o valor da transação</td>
 </tr>
 <tr>
-<td>Integer</td>
-<td>typeOfParcels</td>
-<td>Tipo de parcela (0 - à vista, 1 - lojista, 2 - emissor</td>
+<td>setTypeOfPurchase(Integer typeOfPurchase)</td>
+<td>Tipo da compra (1- débito ou 2 - crédito )</td>
 </tr>
 <tr>
-<td>Integer</td>
-<td>demandId</td>
-<td>Um identificador da transação</td>
+<td>setTypeOfInstalment(Integer typeParcels)</td>
+<td>Tipo de parcela (0 -  à vista ou 1 - parcelamento)</td>
+</tr>
+<tr>
+<td>setNumberOfInstalments(Integer numberOfInstalments)</td>
+<td>Número de parcelas da transação</td>
+</tr>
+<tr>
+<td>setDemandId(Integer demandId)</td>
+<td>Uma numeração para a transação</td>
+</tr>
+<tr>
+<td>setNeededConfirm(boolean isNeededConfirm)</td>
+<td>Confirmação das informações pelo usuário</td>
 </tr>
 </tbody></table>
 <h2 id='starttypedtransaction'>StartTypedTransaction</h2>
