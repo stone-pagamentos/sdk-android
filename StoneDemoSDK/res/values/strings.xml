@@ -6,7 +6,6 @@
     <string-array name="type_installment">
         <item>À VISTA</item>
         <item>LOJISTA</item>
-        <item>EMISSOR</item>
     </string-array>
     <string-array name="number_installments">
         <item>2</item>

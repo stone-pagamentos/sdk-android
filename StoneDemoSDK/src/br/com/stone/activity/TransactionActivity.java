@@ -1,10 +1,10 @@
 package br.com.stone.activity;
 
 import br.com.stone.classes.StartTransaction;
+import br.com.stone.objects.Transaction;
 import br.com.stone.stonedemosdk.R;
 import br.com.stone.utils.GenericMethods;
 import br.com.stone.utils.MaskAmount;
-import br.com.stone.utils.SubAcquire;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +29,8 @@ public class TransactionActivity extends Activity implements OnClickListener{
 	Spinner numberOfInstallmentsSpinner;
 	
 	CheckedTextView autoFlagCheckedTextView;
+	
+	Transaction mTransaction = new Transaction();
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,35 +58,14 @@ public class TransactionActivity extends Activity implements OnClickListener{
 		sendButton.setOnClickListener(this);
 	}
 
-	private int getChecked() {
-		int position = 0;
-
-		if (debitRadioButton.isChecked())
-			position = 1; // debit
-		else
-			position = 2; // credit
+	private int getRadioChecked() {
 		
-		return position;
+		if (debitRadioButton.isChecked())
+			return mTransaction.DEBIT; // debit = 1
+		else
+			return mTransaction.CREDIT; // credit = 2
 	}
 	
-	private AccountType accountType;
-	
-	private AccountType getType() { return accountType; }
-
-	private void setType(AccountType accountType) { this.accountType = accountType; }
-	
-	private int getAccountType() {
-		
-		int accountType;
-
-		if (debitRadioButton.isChecked())
-			accountType = 1; // debit
-		else
-			accountType = 2; // credit
-		
-		return accountType;
-	}
-
 	private int getNumberOfInstallments(String parcel){
 		return Integer.parseInt(parcel);
 	}
@@ -116,63 +97,56 @@ public class TransactionActivity extends Activity implements OnClickListener{
 		numberOfInstallmentsSpinner.setAdapter(numberOfInstallmentsAdapter);
 	}
 	
-	protected void onStop() {
-		super.onStop();
-		this.finish();
-	}
-
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.enviarButton:
 			
-			Integer orderId = null;
-			Integer animationStart = R.anim.fade_in;
-			Integer animationEnd   = R.anim.fade_out;
-			Integer automaticTransaction;
-			String transactionAmount = null;
+			Integer orderId   = null;
+			Integer animStart = R.anim.fade_in;
+			Integer animEnd   = R.anim.fade_out;
+			String  transactionAmount = new String();
 			
-			// If a sub adquitente , fill with the data that is requested . If not, pass the parameter to null.
-			//SubAcquire subAcquire = new SubAcquire();
-			//subAcquire.setSaleAffiliationKey("Your saleAfiilitonKey");
-			//subAcquire.setTradeName("Test Inc.");
-			//subAcquire.setDocumentNumber("11111111111111");
-			//subAcquire.setAddress("Street Test, 100, Center - RJ");
-						
 			if(orderIdEditText.getText().toString() != null && !orderIdEditText.getText().toString().equals(""))
-			{
 				orderId = valueCheck(Integer.parseInt(orderIdEditText.getText().toString()));
-			}
 			
 			if(amountEditText.getText().toString() != null && !amountEditText.getText().toString().equals(""))
-			{
 				transactionAmount = amountEditText.getText().toString();
-			}
+
+			/*
+			 * It's deprecated
+			 * 
+			 * StartTransaction.sendTransactionToStoneApplication(this,              // Context context
+			 *												   transactionAmount,  	 // String transactionAmount
+			 *												   accountType,			 // Integer accountType
+			 *												   numberOfInstallments, // Integer numberOfInstallments
+			 *												   typeOfInstallment,	 // Integer typeOfInstallment
+			 *												   orderId,				 // Integer orderId
+			 *												   automaticTransaction, // Integer automatic sending of the transaction
+			 *												   animaStart,   		 // Integer animationStart	
+			 *												   animaEnd); 	    	 // Integer animationEnd
+			 *
+			 * This is the old way to set a transaction to Stone Aplication
+			 * we recommend you to use the method "startNewTransaction()" in StartTransaction
+			 * as the following example:
+			 * */
+
+			// popule Transaction object
+			mTransaction.setAmount(transactionAmount); 
+			mTransaction.setTypeOfPurchase(getRadioChecked());
+			mTransaction.setNumberOfInstalments(getNumberOfInstallments(numberOfInstallmentsSpinner.getSelectedItem().toString()));
+			mTransaction.setTypeOfInstalment(parcelTypeSpinner.getSelectedItemPosition()); // 
 			
-			if (autoFlagCheckedTextView.isChecked()) 
-			{	
-				automaticTransaction = 1;
-			}	
+			if(orderId != null)
+				mTransaction.setDemandId(orderId);
 			else
-			{
-				automaticTransaction = 2;
-			}	
-						
-			Integer typeOfInstallment    = GenericMethods.getTypeOfInstallment(parcelTypeSpinner.getSelectedItem().toString());
-			Integer numberOfInstallments = getNumberOfInstallments(numberOfInstallmentsSpinner.getSelectedItem().toString());
-			Integer accountType = AccountType.getByValue(getAccountType()).intValue;
+				mTransaction.setDemandId(0);
 			
-			StartTransaction.sendTransactionToStoneApplication(this,                         // Context context
-															   transactionAmount,  		     // String transactionAmount
-															   accountType,				     // Integer accountType
-															   numberOfInstallments, 	     // Integer numberOfInstallments
-															   typeOfInstallment,	 	     // Integer typeOfInstallment
-															   orderId,						 // Integer orderId
-															   automaticTransaction,		 // Integer automatic sending of the transaction
-															   animationStart,				 // Integer animationStart	
-															   animationEnd, 				 // Integer animationEnd	
-															   null);			             // Object subAcquire if an sub acquirer. If not pass the parameter to null
-															   // if autoFlagCheckedTextView == 1, the User needs to confirm
-															   // if autoFlagCheckedTextView == 2, the User need not confirm
+			if (!autoFlagCheckedTextView.isChecked()) 
+				mTransaction.setNeededConfirm(true);
+			else
+				mTransaction.setNeededConfirm(false);
+			
+			StartTransaction.startNewTransaction(this, mTransaction, animStart, animEnd);
 			
 			TransactionActivity.this.finish();
 			
@@ -192,28 +166,9 @@ public class TransactionActivity extends Activity implements OnClickListener{
 		}
 	}
 	
-	public enum AccountType {
-		
-		CHECKING(1),
-		CREDIT(2),
-		SAVINGS(3);
-
-		public final int intValue;
-
-		AccountType(int valueOption) {
-			intValue = valueOption;
-		}
-
-		public int getValue() {
-			return intValue;
-		}
-
-		public static AccountType getByValue(int value) {
-			for(AccountType accountType: AccountType.values())
-				if(accountType.getValue() == value)
-					return accountType;
-			
-			return null;
-		}
+	protected void onStop() {
+		super.onStop();
+		this.finish();
 	}
+	
 }

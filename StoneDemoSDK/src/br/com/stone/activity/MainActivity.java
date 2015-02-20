@@ -18,7 +18,6 @@ public class MainActivity extends Activity implements OnClickListener{
 	Button transaction;
 	Button cancellation;
 	Button ecommerce;
-	Button connection;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,12 +31,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		transaction  = (Button) findViewById(R.id.transationButton);
 		cancellation = (Button) findViewById(R.id.cancellationButton);
 		ecommerce    = (Button) findViewById(R.id.ecommerceButton);
-		connection   = (Button) findViewById(R.id.connectionButton);
 		
 		transaction.setOnClickListener(this);
 		cancellation.setOnClickListener(this);
 		ecommerce.setOnClickListener(this);
-		connection.setOnClickListener(this);
 		
 	}
 
@@ -59,11 +56,6 @@ public class MainActivity extends Activity implements OnClickListener{
 			
 		case R.id.ecommerceButton:
 			intent = new Intent(getApplicationContext(), TypedSaleActivity.class);
-			startActivity(intent);
-			break;
-			
-		case R.id.connectionButton:
-			intent = new Intent(getApplicationContext(), ConnectionActivity.class);
 			startActivity(intent);
 			break;
 			

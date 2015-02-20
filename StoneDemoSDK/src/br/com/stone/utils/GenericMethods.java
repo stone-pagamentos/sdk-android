@@ -12,9 +12,6 @@ public class GenericMethods {
 		case "LOJISTA":
 			typeParcel = 1;
 			break;
-		case "EMISSOR":
-			typeParcel = 2;
-			break;
 		}
 		
 		return typeParcel;
