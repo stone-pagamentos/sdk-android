@@ -69,7 +69,8 @@ public final class Transaction {
 
 	public String toString() {
 
-		return "Transaction:" + "\nAmount..............: " + getAmount()
+		return "Transaction:"
+				+ "\nAmount..............: " + getAmount()
 				+ "\nTypeOfPurchase......: " + getTypeOfPurchase()
 				+ "\nNumberOfInstalments.: " + getNumberOfInstalments()
 				+ "\nInstalmentsType.....: " + getTypeOfPurchase()

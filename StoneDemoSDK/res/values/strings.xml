@@ -20,7 +20,17 @@
         <item>11</item>
         <item>12</item>
     </string-array>
-
-    <string name="hello_world">Hello world!</string>
+    <string-array name="sizes">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Big</item>
+        <item>TAG</item>
+    </string-array>
+    <string-array name="positions">
+        <item>Left</item>
+        <item>Center</item>
+        <item>Right</item>
+        <item>TAG</item>
+    </string-array>
 
 </resources>

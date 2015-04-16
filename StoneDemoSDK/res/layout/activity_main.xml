@@ -38,6 +38,15 @@
         android:layout_below="@+id/cancellationButton"
         android:layout_marginTop="20dp"
         android:text="E-Commerce" />
-     
+
+    <Button
+        android:id="@+id/printButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ecommerceButton"
+        android:layout_marginTop="16dp"
+        android:text="Impressão" />
 
 </RelativeLayout>

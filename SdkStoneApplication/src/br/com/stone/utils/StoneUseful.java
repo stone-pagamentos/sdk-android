@@ -7,5 +7,6 @@ public class StoneUseful {
 	protected static final int    SEND_CANCELLATION = 2;
 	protected static final int    SEND_TYPED_TRANSACTION = 3;
 	protected static final int    SEND_TRANSACTION_V2 = 4;
+	protected static final int    SEND_PRINT_REQUEST  = 1011;
 
 }

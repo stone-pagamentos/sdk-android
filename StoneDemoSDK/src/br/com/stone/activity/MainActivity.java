@@ -3,6 +3,7 @@ package br.com.stone.activity;
 import br.com.stone.methods.CancellationResponse;
 import br.com.stone.methods.TransactionResponse;
 import br.com.stone.stonedemosdk.R;
+import br.com.stone.utils.PinpadObject;
 import br.com.stone.xml.ReturnOfCancellationXml;
 import br.com.stone.xml.ReturnOfTransactionXml;
 import android.app.Activity;
@@ -12,12 +13,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener{
 	
 	Button transaction;
 	Button cancellation;
 	Button ecommerce;
+	Button print;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,10 +34,12 @@ public class MainActivity extends Activity implements OnClickListener{
 		transaction  = (Button) findViewById(R.id.transationButton);
 		cancellation = (Button) findViewById(R.id.cancellationButton);
 		ecommerce    = (Button) findViewById(R.id.ecommerceButton);
+		print    	 = (Button) findViewById(R.id.printButton);
 		
 		transaction.setOnClickListener(this);
 		cancellation.setOnClickListener(this);
 		ecommerce.setOnClickListener(this);
+		print.setOnClickListener(this);
 		
 	}
 
@@ -56,6 +61,11 @@ public class MainActivity extends Activity implements OnClickListener{
 			
 		case R.id.ecommerceButton:
 			intent = new Intent(getApplicationContext(), TypedSaleActivity.class);
+			startActivity(intent);
+			break;
+			
+		case R.id.printButton:
+			intent = new Intent(getApplicationContext(), PrintActivity.class);
 			startActivity(intent);
 			break;
 			
@@ -114,4 +124,19 @@ public class MainActivity extends Activity implements OnClickListener{
 			}
 		}
 	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(resultCode == 99) {
+			
+			Bundle mBundle = data.getExtras();
+			PinpadObject pinpad = (PinpadObject) mBundle.getSerializable("pinpad");
+			Toast.makeText(this, pinpad.toString(), Toast.LENGTH_LONG).show();
+			
+		}
+		
+		
+	}
+
 }
