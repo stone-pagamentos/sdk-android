@@ -8,6 +8,7 @@ public final class Transaction {
 	private Integer typeInstalment;
 	private Integer demandId;
 	private boolean isNeededConfirm;
+	private String 	emailClient;
 
 	public static int DEBIT  = 1;
 	public static int CREDIT = 2;
@@ -66,6 +67,14 @@ public final class Transaction {
 	public void setNeededConfirm(boolean isNeededConfirm) {
 		this.isNeededConfirm = isNeededConfirm;
 	}
+	
+	public void setEmailClient (String emailClient) {
+		this.emailClient = emailClient;
+	}
+	
+	public String getEmailClient () {
+		return emailClient;
+	}
 
 	public String toString() {
 
@@ -75,6 +84,7 @@ public final class Transaction {
 				+ "\nNumberOfInstalments.: " + getNumberOfInstalments()
 				+ "\nInstalmentsType.....: " + getTypeOfPurchase()
 				+ "\nDemandId............: " + getDemandId()
+				+ "\nEmailClient.........: " + getEmailClient()
 				+ "\nAutoSending.........: " + isNeededConfirm();
 	}
 

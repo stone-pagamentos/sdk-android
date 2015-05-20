@@ -1,5 +1,6 @@
 package br.com.stone.methods;
 
+import br.com.stone.utils.StoneUseful;
 import br.com.stone.xml.ReturnOfTransactionXml;
 
 import com.thoughtworks.xstream.XStream;
@@ -17,6 +18,7 @@ public class TransactionResponse {
 		xstream.processAnnotations(new Class[] { ReturnOfTransactionXml.class });
 
 		transaction = (ReturnOfTransactionXml) xstream.fromXML(xmlReceive);
+		StoneUseful.clearBundle(activity);
 
 		return transaction;
 	}

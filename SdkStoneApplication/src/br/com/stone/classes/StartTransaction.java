@@ -95,7 +95,8 @@ public class StartTransaction extends StoneUseful {
 			jsonObject.put("numberOfParcels", transaction.getNumberOfInstalments());
 			jsonObject.put("typeParcels", 	  transaction.getTypeInstalments());
 			jsonObject.put("demandId", 		  transaction.getDemandId());
-			jsonObject.put("isNeededConfirm", transaction.isNeededConfirm());			
+			jsonObject.put("isNeededConfirm", transaction.isNeededConfirm());
+			jsonObject.put("emailClient", 	  transaction.getEmailClient());
 			
 			return jsonObject.toString();
 		} catch (JSONException e) {

@@ -1,10 +1,17 @@
 package br.com.stone.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.stone.classes.StartPrint;
 import br.com.stone.methods.CancellationResponse;
+import br.com.stone.methods.PrintResponse;
 import br.com.stone.methods.TransactionResponse;
+import br.com.stone.objects.PrintObject;
 import br.com.stone.stonedemosdk.R;
 import br.com.stone.utils.PinpadObject;
 import br.com.stone.xml.ReturnOfCancellationXml;
+import br.com.stone.xml.ReturnOfPrintXml;
 import br.com.stone.xml.ReturnOfTransactionXml;
 import android.app.Activity;
 import android.content.Intent;
@@ -87,6 +94,7 @@ public class MainActivity extends Activity implements OnClickListener{
 			
 			String xmlTransaction  = backActivity.getString("xmlTransaction");
 			String xmlCancellation = backActivity.getString("xmlCancellation");
+			String xmlPrint        = backActivity.getString("xmlPrint");
 			
 			// if a transaciton
 			if(xmlTransaction != null && !xmlTransaction.equals("")) {
@@ -105,6 +113,7 @@ public class MainActivity extends Activity implements OnClickListener{
 						+ "\nData                : " + mReturnOfTransactionXml.date
 						+ "\nAmountOfInst.       : " + mReturnOfTransactionXml.amountOfInstallments
 						+ "\nDemandId            : " + mReturnOfTransactionXml.demandId
+//						+ "\nEmailSent           : " + mReturnOfTransactionXml.emailSent
 						+ "\nTipo da transação   : " + mReturnOfTransactionXml.transactionType);
 			}
 			
@@ -122,6 +131,29 @@ public class MainActivity extends Activity implements OnClickListener{
 				
 				
 			}
+			// if a print
+			if (xmlPrint != null && !xmlPrint.equals("")){
+				
+				ReturnOfPrintXml returnOfPrintXml = new ReturnOfPrintXml();
+				returnOfPrintXml = PrintResponse.getPrint(this, xmlPrint, backActivity);
+				
+				switch (returnOfPrintXml.printCode) {
+				case 1:
+					Toast.makeText(getApplicationContext(), "Impresso com sucesso!", Toast.LENGTH_SHORT).show();
+					break;
+				case 2:
+					Toast.makeText(getApplicationContext(), "Ocorreu um erro dutante a impressão.", Toast.LENGTH_SHORT).show();
+					break;
+				case 3:
+					Toast.makeText(getApplicationContext(), "O pinpad não possui suporte para impressão.", Toast.LENGTH_SHORT).show();
+					break;
+
+				default:
+					break;
+				}
+				
+			}
+			
 		}
 	}
 

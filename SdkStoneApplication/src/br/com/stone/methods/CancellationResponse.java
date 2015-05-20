@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import android.app.Activity;
 import android.os.Bundle;
+import br.com.stone.utils.StoneUseful;
 import br.com.stone.xml.ReturnOfCancellationXml;
 
 public class CancellationResponse {
@@ -16,6 +17,7 @@ public class CancellationResponse {
 		xstream.processAnnotations(new Class[] { ReturnOfCancellationXml.class });
 		
 		mReturnOfCancellationXml = (ReturnOfCancellationXml) xstream.fromXML(xmlReceive);
+		StoneUseful.clearBundle(activity);
 		
 		return mReturnOfCancellationXml;
 	}

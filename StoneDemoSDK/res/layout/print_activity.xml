@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:paddingBottom="10dp"
-        android:text="Nova linha" />
+        android:text="Imprimir" />
 
     <ScrollView
         android:layout_width="match_parent"

@@ -21,6 +21,7 @@ public class TransactionActivity extends Activity implements OnClickListener{
 	Button   sendButton;
 	EditText amountEditText;
 	EditText orderIdEditText;
+	EditText emailClientEditText;
 
 	RadioButton debitRadioButton;
 	RadioButton creditRadioButton;
@@ -45,10 +46,11 @@ public class TransactionActivity extends Activity implements OnClickListener{
 
 		debitRadioButton  = (RadioButton) findViewById(R.id.radio0);
 		creditRadioButton = (RadioButton) findViewById(R.id.radio1);
-		amountEditText    = (EditText) findViewById(R.id.valorEditText);
-		orderIdEditText   = (EditText) findViewById(R.id.demandIdEditText);
-		sendButton        = (Button) findViewById(R.id.enviarButton);
+		amountEditText    = (EditText)    findViewById(R.id.transactionAmountEditText);
+		orderIdEditText   = (EditText) 	  findViewById(R.id.orderIdEditText);
+		sendButton        = (Button) 	  findViewById(R.id.sendTransactionButton);
 		autoFlagCheckedTextView = (CheckedTextView) findViewById(R.id.autoFlagCheckedTextView);
+		emailClientEditText     = (EditText) 		findViewById(R.id.emailClientEditText);
 		autoFlagCheckedTextView.setClickable(true);
 
 		MaskAmount ma = new MaskAmount(amountEditText);
@@ -63,7 +65,7 @@ public class TransactionActivity extends Activity implements OnClickListener{
 		if (debitRadioButton.isChecked())
 			return mTransaction.DEBIT; // debit = 1
 		else
-			return mTransaction.CREDIT; // credit = 2
+			return mTransaction.CREDIT;// credit = 2
 	}
 	
 	private int getNumberOfInstallments(String parcel){
@@ -99,7 +101,7 @@ public class TransactionActivity extends Activity implements OnClickListener{
 	
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.enviarButton:
+		case R.id.sendTransactionButton:
 			
 			Integer orderId   = null;
 			Integer animStart = R.anim.fade_in;
@@ -134,7 +136,12 @@ public class TransactionActivity extends Activity implements OnClickListener{
 			mTransaction.setAmount(transactionAmount); 
 			mTransaction.setTypeOfPurchase(getRadioChecked());
 			mTransaction.setNumberOfInstalments(getNumberOfInstallments(numberOfInstallmentsSpinner.getSelectedItem().toString()));
-			mTransaction.setTypeOfInstalment(parcelTypeSpinner.getSelectedItemPosition()); // 
+			mTransaction.setTypeOfInstalment(parcelTypeSpinner.getSelectedItemPosition());
+			
+			String emailClient = emailClientEditText.getText().toString();
+			
+			if (emailClient != null)
+				mTransaction.setEmailClient(emailClient);
 			
 			if(orderId != null)
 				mTransaction.setDemandId(orderId);

@@ -50,12 +50,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/tipoParcelamento"
-                android:layout_alignRight="@+id/valorEditText"
+                android:layout_alignRight="@+id/transactionAmountEditText"
                 android:layout_below="@+id/tipoParcelamento"
                 android:layout_marginTop="20dp" />
 
             <EditText
-                android:id="@+id/valorEditText"
+                android:id="@+id/transactionAmountEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/numParcelas"
@@ -65,22 +65,12 @@
                 android:inputType="number" >
             </EditText>
 
-            <Button
-                android:id="@+id/enviarButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/demandIdEditText"
-                android:layout_alignRight="@+id/demandIdEditText"
-                android:layout_below="@+id/demandIdEditText"
-                android:layout_marginTop="10dp"
-                android:text="ENVIAR" />
-
             <EditText
-                android:id="@+id/demandIdEditText"
+                android:id="@+id/orderIdEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/valorEditText"
-                android:layout_below="@+id/valorEditText"
+                android:layout_alignLeft="@+id/transactionAmountEditText"
+                android:layout_below="@+id/transactionAmountEditText"
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:hint="ID do Pedido (opicional)"
@@ -102,10 +92,32 @@
                 android:id="@+id/tipoParcelamento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/valorEditText"
-                android:layout_alignRight="@+id/valorEditText"
+                android:layout_alignLeft="@+id/transactionAmountEditText"
+                android:layout_alignRight="@+id/transactionAmountEditText"
                 android:layout_below="@+id/autoFlagCheckedTextView"
                 android:layout_marginTop="20dp" />
+
+            <EditText
+                android:id="@+id/emailClientEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/orderIdEditText"
+                android:layout_alignRight="@+id/orderIdEditText"
+                android:layout_below="@+id/orderIdEditText"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Email do cliente"
+                android:inputType="textEmailAddress" />
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/sendTransactionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/emailClientEditText"
+                android:layout_alignRight="@+id/emailClientEditText"
+                android:layout_below="@+id/emailClientEditText"
+                android:text="ENVIAR" />
 
         </RelativeLayout>
     </ScrollView>

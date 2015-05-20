@@ -1,5 +1,7 @@
 package br.com.stone.utils;
 
+import android.app.Activity;
+
 public class StoneUseful {
 	
 	protected static final String STONE_PACKAGE     = "br.com.stone";
@@ -9,4 +11,10 @@ public class StoneUseful {
 	protected static final int    SEND_TRANSACTION_V2 = 4;
 	protected static final int    SEND_PRINT_REQUEST  = 1011;
 
+	public static void clearBundle(Activity activityForClear){
+		
+		activityForClear.getIntent().removeExtra("xmlTransaction");
+		activityForClear.getIntent().removeExtra("xmlCancellation");
+		activityForClear.getIntent().removeExtra("xmlPrint");
+	}
 }

@@ -34,4 +34,8 @@ public class ReturnOfTransactionXml {
 
 	@XStreamAlias("demandId")
 	public long demandId;
+	
+	@XStreamAlias("emailSent")
+	public String emailSent;
+	
 }
