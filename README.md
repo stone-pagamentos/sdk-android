@@ -1,6 +1,5 @@
 SDK e código de exemplo
 =======================
 
-Documentação online de integração
-=
-<br><i>http://stone-pagamentos.github.io/sdk-android/#introduo</i>
+<i>Toda a documentação de ingração pode ser encontrada <a href="http://stone-pagamentos.github.io/sdk-android/#introduo">aqui</a>!</i>
+
