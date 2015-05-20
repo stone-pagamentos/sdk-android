@@ -3,7 +3,6 @@ package br.com.stone.activity;
 import br.com.stone.classes.StartTransaction;
 import br.com.stone.objects.Transaction;
 import br.com.stone.stonedemosdk.R;
-import br.com.stone.utils.GenericMethods;
 import br.com.stone.utils.MaskAmount;
 import android.app.Activity;
 import android.os.Bundle;

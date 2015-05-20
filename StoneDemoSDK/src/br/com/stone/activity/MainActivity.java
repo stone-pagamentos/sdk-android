@@ -1,15 +1,9 @@
 package br.com.stone.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import br.com.stone.classes.StartPrint;
 import br.com.stone.methods.CancellationResponse;
 import br.com.stone.methods.PrintResponse;
 import br.com.stone.methods.TransactionResponse;
-import br.com.stone.objects.PrintObject;
 import br.com.stone.stonedemosdk.R;
-import br.com.stone.utils.PinpadObject;
 import br.com.stone.xml.ReturnOfCancellationXml;
 import br.com.stone.xml.ReturnOfPrintXml;
 import br.com.stone.xml.ReturnOfTransactionXml;
@@ -96,7 +90,7 @@ public class MainActivity extends Activity implements OnClickListener{
 			String xmlCancellation = backActivity.getString("xmlCancellation");
 			String xmlPrint        = backActivity.getString("xmlPrint");
 			
-			// if a transaciton
+			// if a transaction
 			if(xmlTransaction != null && !xmlTransaction.equals("")) {
 				
 				ReturnOfTransactionXml mReturnOfTransactionXml = new ReturnOfTransactionXml();
@@ -156,19 +150,4 @@ public class MainActivity extends Activity implements OnClickListener{
 			
 		}
 	}
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(resultCode == 99) {
-			
-			Bundle mBundle = data.getExtras();
-			PinpadObject pinpad = (PinpadObject) mBundle.getSerializable("pinpad");
-			Toast.makeText(this, pinpad.toString(), Toast.LENGTH_LONG).show();
-			
-		}
-		
-		
-	}
-
 }

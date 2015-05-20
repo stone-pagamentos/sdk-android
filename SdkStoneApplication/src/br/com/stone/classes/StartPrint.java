@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.util.Log;
+import android.widget.Toast;
 import br.com.stone.objects.PrintObject;
 import br.com.stone.utils.StoneUseful;
 
@@ -50,15 +51,22 @@ public class StartPrint extends StoneUseful{
 		}
 	}
 	
-	public static final void sendPrint(Activity activity, List<PrintObject> printList) {
-		
-		String thisPackage = activity.getApplicationContext().getPackageName();
-		
-		Intent intent = activity.getPackageManager().getLaunchIntentForPackage(STONE_PACKAGE);
-		intent.putExtra("action", SEND_PRINT_REQUEST);
-		intent.putParcelableArrayListExtra("listToPrint", (ArrayList<? extends Parcelable>) printList);
-		intent.putExtra("externalPackage", thisPackage);
-		activity.startActivity(intent);
+	public static final void sendPrint(Activity activity,
+			List<PrintObject> printList) {
+
+		try {
+
+			String thisPackage = activity.getApplicationContext().getPackageName();
+
+			Intent intent = activity.getPackageManager().getLaunchIntentForPackage(STONE_PACKAGE);
+			intent.putExtra("action", SEND_PRINT_REQUEST);
+			intent.putParcelableArrayListExtra("listToPrint", (ArrayList<? extends Parcelable>) printList);
+			intent.putExtra("externalPackage", thisPackage);
+			activity.startActivity(intent);
+		} catch (Exception e) {
+			// show toast if there's no application
+			Toast.makeText( activity, "Aplicativo da Stone não foi encontrado nesse dispositivo.", Toast.LENGTH_LONG).show();
+		}
 	}
 
 }
