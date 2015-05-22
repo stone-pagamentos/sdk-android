@@ -11,7 +11,7 @@ import android.widget.Toast;
 import br.com.stone.objects.PrintObject;
 import br.com.stone.utils.StoneUseful;
 
-public class StartPrint extends StoneUseful{
+public class StartPrint extends StoneUseful {
 	
 	/*
 	 * small  - 48 

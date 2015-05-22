@@ -95,7 +95,6 @@ public class PrintActivity extends Activity implements OnClickListener {
 		// insert 6 lines in space
 		StartPrint.putSpace(printList, 6);
 		
-		
 		// WARNING!!
 		// it is important to check that all the elements
 		// of your list are in the correct sizes
