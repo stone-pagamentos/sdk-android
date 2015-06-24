@@ -44,6 +44,20 @@
 <p>O SDK da Stone para Android oferece uma forma simples e rápida para iniciar sua integração. Com o SDK é possível integrar um dispositivo com bluetooth e Android 2.3 ou superior com o serviço Stone. Para isso, basta importar as bibliotecas <code class="prettyprint">XStream</code> e <code class="prettyprint">sdkstoneapplication.jar</code> em seu projeto.</p>
 
 <p>Você poderá fazer o download do SDK, XStream e do código de exemplo no repositório android-sdk da Stone no Github: <a href="https://github.com/stone-pagamentos/sdk-android">android-sdk</a></p>
+<h2 id='conceitos-bsicos'>Conceitos básicos</h2><h3 id='informaes-de-bsicas-referentes--integrao'>Informações de básicas referentes à integração</h3>
+<ul>
+<li>A integração requer android 2.3 ou superior;</li>
+<li>Um tablet ou celular com bluetooth;</li>
+<li>Utilizar as funções disponíveis no .jar de integração;</li>
+<li>Essa documentação foi criada dando como exemplos a aplicação ‘StoneSDK’, desenvolvido pela Stone.</li>
+<li>Essa SDK usa de suporte o jar XStream na versão 1.4.7 (xstream-1.4.7.jar).</li>
+</ul>
+<h2 id='como-integrar-com-a-stone'>Como Integrar com a Stone</h2>
+<ul>
+<li>Certifique-se que o .jar está na pasta ‘libs’ do seu projeto, como na imagem ao lado:</li>
+<li>Faça o import do jar da XStream;</li>
+<li>Após incluir o .jar de integração na pasta ‘libs’, você poderá iniciar a integração.</li>
+</ul>
 <h1 id='integrao'>Integração</h1><h2 id='envio-da-transao'>Envio da transação</h2>
 <aside class="warning">O método `sendTransactionToStoneApplication` está obsoleto e será removido em versões futuras</aside>
 <pre><code class="highlight java"><span class="nd">@deprecated</span>
@@ -69,7 +83,7 @@
 <aside class="warning">
 OBS: Lembrando que se o aplicativo da Stone for fechado, a conexão será interrompida por alguns segundos, e se a opção de ‘Conexão automática’ estiver marcada, dentro de alguns segundos e conexão irá o serviço será ativado e irá conectar com o PINpad. 
 </aside>
-<h2 id='retorno-da-transao'>Retorno da transação</h2><pre><code class="highlight java"><span class="n">String</span> <span class="n">xmlTransaction</span>  <span class="o">=</span> <span class="n">backActivity</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"xmlTransaction"</span><span class="o">);</span>
+<h3 id='retorno-da-transao'>Retorno da transação</h3><pre><code class="highlight java"><span class="n">String</span> <span class="n">xmlTransaction</span>  <span class="o">=</span> <span class="n">backActivity</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"xmlTransaction"</span><span class="o">);</span>
 <span class="n">ReturnOfTransactionXml</span> <span class="n">mReturnOfTransactionXml</span><span class="o">;</span>
 <span class="n">mReturnOfTransactionXml</span> <span class="o">=</span> <span class="n">TransactionResponse</span><span class="o">.</span><span class="na">getTransaction</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">xmlTransaction</span><span class="o">,</span> <span class="n">backActivity</span><span class="o">);</span>
 
@@ -87,9 +101,157 @@ OBS: Lembrando que se o aplicativo da Stone for fechado, a conexão será interr
         <span class="o">+</span> <span class="s">"\nTipo da transação   : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">transactionType</span><span class="o">);</span>
 </code></pre>
 
-<p>Quando o autorizador da Stone responder a transação, aprovada ou negada, o aplicativo da Stone irá retornar para o aplicativo que o chamou e enviará algumas informações que foram recebidas do autorizador.</p>
+<p>Quando o autorizador da Stone responder a transação, isso quer dizer se ela foi aprovada ou negada, o aplicativo da Stone irá retornar para o aplicativo que chamou o mesmo e enviará algumas informações que foram recebidas do autorizador.</p>
 
-<p>O método getExternalInformations() fica responsável por verificar se há ou não um retorno de transação. É aconselhável que ele fique no método “onResume()” da main do seu projeto. O aplicativo da Stone retornará um XML contendo as informações da transação: <code class="prettyprint">getIntent().getExtras().getString(&quot;xmlTransaction&quot;)</code></p>
+<p>O StoneSDK possui um método que fica responsável por verificar se há ou não um retorno de transação, o getExternalInformations(), é aconselhável que ele fique no método “onResume()” da main do seu projeto.
+O aplicativo da Stone retornará um XML contendo as informações da transação.</p>
+
+<p>A captura da resposta, dentro desse método, é feita da seguinte forma:  <code class="prettyprint">getIntent().getExtras().getString(&quot;xmlTransaction&quot;)</code></p>
+
+<p>A variável ‘backActivity’ recebe as informações de uma Intent e verifica se é nula.</p>
+
+<p>Se a variável não for nula, é instanciada uma variável do tipo ReturnOfTransactionXml, que é uma classe responsável por serializar e desserializar uma transação e tornar a mesma um objeto.</p>
+
+<p>Se ela for diferente de ‘null’, o objeto será desserealizado, sendo assim, tornando-se manipulável através da variável ‘backActivity’.</p>
+
+<p>Um exemplo de manipulação dessa variável pode ser visualizada ao lado:</p>
+
+<p>A classe TransactionResponse está no sdkstoneapplication.jar, e o método ‘getTransaction’ deve receber como parâmetro:</p>
+
+<ul>
+<li>Contexto da aplicação</li>
+<li>XML da transação</li>
+<li>Bundle</li>
+</ul>
+<h2 id='cancelamento'>Cancelamento</h2>
+<p>A partir dos valores que são passados de retorno após o envio de uma transação, é possível fazer o cancelamento de uma transação, se a mesma ainda permanecer no banco de dados do aplicativo da Stone.</p>
+
+<p>Para fazer o cancelamento de uma transação, serão necessários:</p>
+
+<ul>
+<li>Código de autorização da transação</li>
+<li>Numeração da transação</li>
+<li>Contexto da aplicação</li>
+</ul>
+
+<p>Código de autorização da transação :</p>
+
+<table><thead>
+<tr>
+<th>Tipo</th>
+<th>Passagem</th>
+<th>Descrição</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>String</td>
+<td>ARN</td>
+<td>Numeração da transação</td>
+</tr>
+<tr>
+<td>String</td>
+<td>CA</td>
+<td>Código da transação</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>getApplicationContext()</td>
+<td>Contexto da aplicação</td>
+</tr>
+</tbody></table>
+
+<p>O envio do cancelamento é muito parecido com o do envio de uma transação, como pode ser visto a seguir: <code class="prettyprint">StartCancellation.sendCancellationToStoneApplication(getApplication(), arn, ca);</code></p>
+<h3 id='resposta-do-cancelamento'>Resposta do Cancelamento</h3>
+<p>A resposta do cancelamento também é bastante similar à resposta da transação:</p>
+
+<p>A String ‘xmlCancellation’ é a responsável por pegar a resposta da Intent do cancelamento. Uma verificação se ela é numa ou vazia, se não for, exibir no LogCat as informações.</p>
+
+<p><code class="prettyprint">String xmlCancellation = backActivity.getString(&quot;xmlCancellation&quot;);</code></p>
+
+<p>A resposta da requisição de cancelamento possui como resposta:</p>
+
+<ul>
+<li>Código de autorização da transação</li>
+<li>Numeração da transação</li>
+<li>Status</li>
+</ul>
+
+<p>Respostas do cancelamento:</p>
+
+<table><thead>
+<tr>
+<th>Tipo</th>
+<th>Passagem</th>
+<th>Descrição</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>String</td>
+<td>ARN</td>
+<td>Numeração da transação</td>
+</tr>
+<tr>
+<td>String</td>
+<td>CA</td>
+<td>Código da transação</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Status</td>
+<td><strong>Approved</strong> – Cancelamento realizado com sucesso; <strong>Declined</strong> – Cancelamento negado; <strong>PartialApproved</strong> – Parcialmente aprovada; <strong>TchenicalError</strong> – Erro técnico no proxy de cancelamento;</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">Por padrão, a senha de cancelamento é “1234”, podendo ser alterada nas CONFIGURAÇÕES da aplicação.</aside>
+<h2 id='impresso'>Impressão</h2>
+<p>As impressoras dos Pinpads também podem ser utilizadas pela API de integração, para isso existe a classe StartPrint.</p>
+
+<p>Na classe StartPrint, estão disponíveis três métodos:</p>
+
+<ul>
+<li>validateListSize() – responsável por validar o tamanho de cada linha e tamanho dos caractéres.</li>
+<li>putSpace() – responsável por adicionar quantidades de espaços no final da lista </li>
+<li>sendPrint() - responsável por  enviar a lista de impressão para o app da Stone</li>
+</ul>
+
+<p>Para imprimir, basta criar uma lista de PrintObject, esse objeto representa cada linha que será impressa.</p>
+
+<aside class="notice">Ao ser passado “TAG” como tamanho ou alinhamento, será impresso um QR Code com o conteúdo que foi passado.</aside>
+<h3 id='4-2-resposta-da-impresso'>4.2 Resposta da impressão</h3>
+<p>Os commandos de impressão possuem uma resposta que devem ser esperadas junto às demais respostas na Main da aplicação.</p>
+
+<p><code class="prettyprint">String xmlPrint = (seu bundle).getString(“xmlPrint”);</code></p>
+
+<p>Essa String deve ser passada para o método PrintResponse.getPrint();</p>
+<pre><code class="highlight java"><span class="n">ReturnOfPrintXml</span> <span class="n">returnOfPrintXml</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ReturnOfPrintXml</span><span class="o">();</span>
+<span class="n">returnOfPrintXml</span> <span class="o">=</span> <span class="n">PrintResponse</span><span class="o">.</span><span class="na">getPrint</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">xmlPrint</span><span class="o">,</span> <span class="n">backActivity</span><span class="o">);</span>
+</code></pre>
+
+<p>Desta forma você terá um objeto do tipo ReturnOfPrintXml e poderá saber se a impressão foi concluída com sucesso pela propriedade printCode:</p>
+
+<table><thead>
+<tr>
+<th>Tipo</th>
+<th>Resposta</th>
+<th>Significado</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>int</td>
+<td>1</td>
+<td>Impresso com sucesso</td>
+</tr>
+<tr>
+<td>Int</td>
+<td>2</td>
+<td>Ocorreu um erro durante a impressão</td>
+</tr>
+<tr>
+<td>Int</td>
+<td>3</td>
+<td>Pinpad conectado não possui impressoda (Ex: D200)</td>
+</tr>
+</tbody></table>
 <h1 id='classes'>Classes</h1>
 <table><thead>
 <tr>
@@ -294,6 +456,62 @@ OBS: Lembrando que se o aplicativo da Stone for fechado, a conexão será interr
 <td>Bundle</td>
 <td>backActivity</td>
 <td>O retorno da Intent</td>
+</tr>
+</tbody></table>
+<h2 id='returnoftransactionxml'>ReturnOfTransactionXML</h2>
+<p>OBS: Todos os valores que são passados, são retornados para futuras comparações, caso isso seja importante para o desenvolvedor.</p>
+
+<table><thead>
+<tr>
+<th>Tipo</th>
+<th>Parâmetro</th>
+<th>Descrição</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>String</td>
+<td>Flag</td>
+<td>MASTERCARD ou VISA</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Arn</td>
+<td>Numeração da transação</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Amount</td>
+<td>Valor da transação</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Date</td>
+<td>Formato: YYYY-MM-dd HH:mm:ss</td>
+</tr>
+<tr>
+<td>String</td>
+<td>CA</td>
+<td>Código de autorização</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Parcel</td>
+<td>Número de parcelas</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Status</td>
+<td>APR ou DEC</td>
+</tr>
+<tr>
+<td>String</td>
+<td>TransactionType</td>
+<td>1 – débito; 2 – crédito</td>
+</tr>
+<tr>
+<td>Long</td>
+<td>DemandID</td>
+<td>Número do ID do pedido</td>
 </tr>
 </tbody></table>
 
