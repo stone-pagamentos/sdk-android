@@ -41,276 +41,25 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduo'>Introdução</h1>
-<p>O SDK da Stone para Android oferece uma forma simples e rápida para iniciar sua integração. Com o SDK é possível integrar um dispositivo com bluetooth e Android 2.3 ou superior com o serviço Stone. Para isso, basta importar as bibliotecas <code class="prettyprint">XStream</code> e <code class="prettyprint">sdkstoneapplication.jar</code> em seu projeto.</p>
+<p>O SDK da Stone para Android oferece uma forma simples e rápida para iniciar sua integração. Com o SDK é possível integrar um dispositivo com bluetooth e Android 2.3 ou superior com o serviço Stone. A SDK V2 segue estrutura da imagem abaixo:</p>
 
-<p>Você poderá fazer o download do SDK, XStream e do código de exemplo no repositório android-sdk da Stone no Github: <a href="https://github.com/stone-pagamentos/sdk-android">android-sdk</a></p>
-<h2 id='conceitos-bsicos'>Conceitos básicos</h2><h3 id='informaes-de-bsicas-referentes--integrao'>Informações de básicas referentes à integração</h3>
-<ul>
-<li>A integração requer android 2.3 ou superior;</li>
-<li>Um tablet ou celular com bluetooth;</li>
-<li>Utilizar as funções disponíveis no .jar de integração;</li>
-<li>Essa documentação foi criada dando como exemplos a aplicação ‘StoneSDK’, desenvolvido pela Stone.</li>
-<li>Essa SDK usa de suporte o jar XStream na versão 1.4.7 (xstream-1.4.7.jar).</li>
-</ul>
-<h2 id='como-integrar-com-a-stone'>Como Integrar com a Stone</h2>
-<ul>
-<li>Certifique-se que o .jar está na pasta ‘libs’ do seu projeto, como na imagem ao lado:</li>
-<li>Faça o import do jar da XStream;</li>
-<li>Após incluir o .jar de integração na pasta ‘libs’, você poderá iniciar a integração.</li>
-</ul>
-<h1 id='integrao'>Integração</h1><h2 id='envio-da-transao'>Envio da transação</h2>
-<aside class="warning">O método `sendTransactionToStoneApplication` está obsoleto e será removido em versões futuras</aside>
-<pre><code class="highlight java"><span class="nd">@deprecated</span>
-<span class="n">StartTransaction</span><span class="o">.</span><span class="na">sendTransactionToStoneApplication</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span>
-                                                   <span class="n">amount</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">(),</span>
-                                                   <span class="n">getChecked</span><span class="o">(),</span>
-                                                   <span class="n">numberOfParcel</span><span class="o">,</span>
-                                                   <span class="n">parcelType</span><span class="o">,</span>
-                                                   <span class="n">demand</span><span class="o">,</span>
-                                                   <span class="n">autoFlagCheckedTextView</span><span class="o">.</span><span class="na">isChecked</span><span class="o">()</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">2</span><span class="o">,</span>
-                                                   <span class="n">R</span><span class="o">.</span><span class="na">anim</span><span class="o">.</span><span class="na">fade_in</span><span class="o">,</span>
-                                                   <span class="n">R</span><span class="o">.</span><span class="na">anim</span><span class="o">.</span><span class="na">fade_out</span> <span class="o">);</span>
-</code></pre>
-<pre><code class="highlight java"><span class="n">StartTransaction</span><span class="o">.</span><span class="na">startNewTransaction</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">mTransaction</span><span class="o">,</span> <span class="n">animStart</span><span class="o">,</span> <span class="n">animEnd</span><span class="o">);</span>
-</code></pre>
+<p><img alt="Estrutura SDK" src="images/estrutura-sdk.png" /></p>
 
-<p>O usuário terá uma transação de interface que o levará da sua aplicação para a aplicação da Stone. O SDK faz a comunicação com o aplicativo <a href="https://play.google.com/store/apps/details?id=br.com.stone">Stone Mobile</a> que, por sua vez, se comunica com o PINPad. O aplicativo está encarregado de avisar quando há ou não uma conexão com algum PINpad. Se o usuário não estiver conectado com nenhum dispositivo, o aplicativo exibirá um botão para buscar e conectar com algum dispositivo.</p>
-
-<p>A conexão com o PINpad pode ser criada automaticamente após a primeira conexão. Para essa função ser habilitada, é necessário ir em CONFIGURAÇÕES, localizada na aba lateral e selecionar a opção de ‘Conexão automática’.</p>
-
-<p>Quando esta opção está marcada, um serviço é ativado. Esse serviço é responsável por verificar a conexão com o PINpad a cada 5 minutos. Se nenhum PINpad estiver conectado com o dispositivo, o mesmo tentará criar conexão com o último PINpad conectado com o dispositivo.</p>
-
-<aside class="warning">
-OBS: Lembrando que se o aplicativo da Stone for fechado, a conexão será interrompida por alguns segundos, e se a opção de ‘Conexão automática’ estiver marcada, dentro de alguns segundos e conexão irá o serviço será ativado e irá conectar com o PINpad. 
-</aside>
-<h3 id='retorno-da-transao'>Retorno da transação</h3><pre><code class="highlight java"><span class="n">String</span> <span class="n">xmlTransaction</span>  <span class="o">=</span> <span class="n">backActivity</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"xmlTransaction"</span><span class="o">);</span>
-<span class="n">ReturnOfTransactionXml</span> <span class="n">mReturnOfTransactionXml</span><span class="o">;</span>
-<span class="n">mReturnOfTransactionXml</span> <span class="o">=</span> <span class="n">TransactionResponse</span><span class="o">.</span><span class="na">getTransaction</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">xmlTransaction</span><span class="o">,</span> <span class="n">backActivity</span><span class="o">);</span>
-
-<span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">"sdk_stone"</span><span class="o">,</span>
-        <span class="s">"\n\n======== Dados recebidos SDK ========"</span>
-        <span class="o">+</span> <span class="s">"\nValor               : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">amount</span>
-        <span class="o">+</span> <span class="s">"\nARN                 : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">arn</span>
-        <span class="o">+</span> <span class="s">"\nParcelas            : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">parcel</span>
-        <span class="o">+</span> <span class="s">"\nBandeira            : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">flag</span>
-        <span class="o">+</span> <span class="s">"\nCA                  : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">ca</span>
-        <span class="o">+</span> <span class="s">"\nStatus              : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">status</span>
-        <span class="o">+</span> <span class="s">"\nData                : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">date</span>
-        <span class="o">+</span> <span class="s">"\nAmountOfInst.       : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">amountOfInstallments</span>
-        <span class="o">+</span> <span class="s">"\nDemandId            : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">demandId</span>
-        <span class="o">+</span> <span class="s">"\nTipo da transação   : "</span> <span class="o">+</span> <span class="n">mReturnOfTransactionXml</span><span class="o">.</span><span class="na">transactionType</span><span class="o">);</span>
-</code></pre>
-
-<p>Quando o autorizador da Stone responder a transação, isso quer dizer se ela foi aprovada ou negada, o aplicativo da Stone irá retornar para o aplicativo que chamou o mesmo e enviará algumas informações que foram recebidas do autorizador.</p>
-
-<p>O StoneSDK possui um método que fica responsável por verificar se há ou não um retorno de transação, o getExternalInformations(), é aconselhável que ele fique no método “onResume()” da main do seu projeto.
-O aplicativo da Stone retornará um XML contendo as informações da transação.</p>
-
-<p>A captura da resposta, dentro desse método, é feita da seguinte forma:  <code class="prettyprint">getIntent().getExtras().getString(&quot;xmlTransaction&quot;)</code></p>
-
-<p>A variável ‘backActivity’ recebe as informações de uma Intent e verifica se é nula.</p>
-
-<p>Se a variável não for nula, é instanciada uma variável do tipo ReturnOfTransactionXml, que é uma classe responsável por serializar e desserializar uma transação e tornar a mesma um objeto.</p>
-
-<p>Se ela for diferente de ‘null’, o objeto será desserealizado, sendo assim, tornando-se manipulável através da variável ‘backActivity’.</p>
-
-<p>Um exemplo de manipulação dessa variável pode ser visualizada ao lado:</p>
-
-<p>A classe TransactionResponse está no sdkstoneapplication.jar, e o método ‘getTransaction’ deve receber como parâmetro:</p>
+<p>A SDK foi dividida em 4 módulos:</p>
 
 <ul>
-<li>Contexto da aplicação</li>
-<li>XML da transação</li>
-<li>Bundle</li>
+<li>Providers</li>
+<li>Utils</li>
+<li>Comandos</li>
+<li>Outros</li>
 </ul>
-<h2 id='cancelamento'>Cancelamento</h2>
-<p>A partir dos valores que são passados de retorno após o envio de uma transação, é possível fazer o cancelamento de uma transação, se a mesma ainda permanecer no banco de dados do aplicativo da Stone.</p>
+<h2 id='providers'>Providers</h2>
+<p>Todos os providers seguem o mesmo modelo. Todos herdam de uma classe modelo que extende da classe AsyncTask do Android. Então toda escritas e leitura de comandos com o Pinpad, requisições de transações e ativações, conexões e etc, serão executadas em uma thread secundária do método ‘doInBackground’.</p>
 
-<p>Para fazer o cancelamento de uma transação, serão necessários:</p>
+<p>Todas podem rodar em background ou com um simples feedback para o seu usuário (um dialog com um título e uma mensagem de sua escolha).</p>
 
-<ul>
-<li>Código de autorização da transação</li>
-<li>Numeração da transação</li>
-<li>Contexto da aplicação</li>
-</ul>
-
-<p>Código de autorização da transação :</p>
-
-<table><thead>
-<tr>
-<th>Tipo</th>
-<th>Passagem</th>
-<th>Descrição</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>String</td>
-<td>ARN</td>
-<td>Numeração da transação</td>
-</tr>
-<tr>
-<td>String</td>
-<td>CA</td>
-<td>Código da transação</td>
-</tr>
-<tr>
-<td>Context</td>
-<td>getApplicationContext()</td>
-<td>Contexto da aplicação</td>
-</tr>
-</tbody></table>
-
-<p>O envio do cancelamento é muito parecido com o do envio de uma transação, como pode ser visto a seguir: <code class="prettyprint">StartCancellation.sendCancellationToStoneApplication(getApplication(), arn, ca);</code></p>
-<h3 id='resposta-do-cancelamento'>Resposta do Cancelamento</h3>
-<p>A resposta do cancelamento também é bastante similar à resposta da transação:</p>
-
-<p>A String ‘xmlCancellation’ é a responsável por pegar a resposta da Intent do cancelamento. Uma verificação se ela é numa ou vazia, se não for, exibir no LogCat as informações.</p>
-
-<p><code class="prettyprint">String xmlCancellation = backActivity.getString(&quot;xmlCancellation&quot;);</code></p>
-
-<p>A resposta da requisição de cancelamento possui como resposta:</p>
-
-<ul>
-<li>Código de autorização da transação</li>
-<li>Numeração da transação</li>
-<li>Status</li>
-</ul>
-
-<p>Respostas do cancelamento:</p>
-
-<table><thead>
-<tr>
-<th>Tipo</th>
-<th>Passagem</th>
-<th>Descrição</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>String</td>
-<td>ARN</td>
-<td>Numeração da transação</td>
-</tr>
-<tr>
-<td>String</td>
-<td>CA</td>
-<td>Código da transação</td>
-</tr>
-<tr>
-<td>String</td>
-<td>Status</td>
-<td><strong>Approved</strong> – Cancelamento realizado com sucesso; <strong>Declined</strong> – Cancelamento negado; <strong>PartialApproved</strong> – Parcialmente aprovada; <strong>TchenicalError</strong> – Erro técnico no proxy de cancelamento;</td>
-</tr>
-</tbody></table>
-
-<aside class="notice">Por padrão, a senha de cancelamento é “1234”, podendo ser alterada nas CONFIGURAÇÕES da aplicação.</aside>
-<h2 id='impresso'>Impressão</h2>
-<p>As impressoras dos Pinpads também podem ser utilizadas pela API de integração, para isso existe a classe StartPrint.</p>
-
-<p>Na classe StartPrint, estão disponíveis três métodos:</p>
-
-<ul>
-<li>validateListSize() – responsável por validar o tamanho de cada linha e tamanho dos caractéres.</li>
-<li>putSpace() – responsável por adicionar quantidades de espaços no final da lista </li>
-<li>sendPrint() - responsável por  enviar a lista de impressão para o app da Stone</li>
-</ul>
-
-<p>Para imprimir, basta criar uma lista de PrintObject, esse objeto representa cada linha que será impressa.</p>
-
-<aside class="notice">Ao ser passado “TAG” como tamanho ou alinhamento, será impresso um QR Code com o conteúdo que foi passado.</aside>
-<h3 id='4-2-resposta-da-impresso'>4.2 Resposta da impressão</h3>
-<p>Os commandos de impressão possuem uma resposta que devem ser esperadas junto às demais respostas na Main da aplicação.</p>
-
-<p><code class="prettyprint">String xmlPrint = (seu bundle).getString(“xmlPrint”);</code></p>
-
-<p>Essa String deve ser passada para o método PrintResponse.getPrint();</p>
-<pre><code class="highlight java"><span class="n">ReturnOfPrintXml</span> <span class="n">returnOfPrintXml</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ReturnOfPrintXml</span><span class="o">();</span>
-<span class="n">returnOfPrintXml</span> <span class="o">=</span> <span class="n">PrintResponse</span><span class="o">.</span><span class="na">getPrint</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">xmlPrint</span><span class="o">,</span> <span class="n">backActivity</span><span class="o">);</span>
-</code></pre>
-
-<p>Desta forma você terá um objeto do tipo ReturnOfPrintXml e poderá saber se a impressão foi concluída com sucesso pela propriedade printCode:</p>
-
-<table><thead>
-<tr>
-<th>Tipo</th>
-<th>Resposta</th>
-<th>Significado</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>int</td>
-<td>1</td>
-<td>Impresso com sucesso</td>
-</tr>
-<tr>
-<td>Int</td>
-<td>2</td>
-<td>Ocorreu um erro durante a impressão</td>
-</tr>
-<tr>
-<td>Int</td>
-<td>3</td>
-<td>Pinpad conectado não possui impressoda (Ex: D200)</td>
-</tr>
-</tbody></table>
-<h1 id='classes'>Classes</h1>
-<table><thead>
-<tr>
-<th>Nome</th>
-<th>Descrição</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>StartTransaction</td>
-<td>Essa classe envia uma transação para o aplicativo Stone Mobile.</td>
-</tr>
-<tr>
-<td>StartTypedTransaction</td>
-<td>Essa classe envia uma transação digitada para o aplicativo Stone Mobile.</td>
-</tr>
-<tr>
-<td>StartCancellation</td>
-<td>Essa classe permite o cancelamento de transações</td>
-</tr>
-</tbody></table>
-<h2 id='starttransaction'>StartTransaction</h2>
-<p>Essa classe envia uma transação para o aplicativo Stone Mobile.</p>
-
-<p><code class="prettyprint">void StartTransaction.startNewTransaction(Activity activity, Transaction transaction, Integer animStart, Integer animEnd);</code></p>
-<pre><code class="highlight java"><span class="n">StartTransaction</span><span class="o">.</span><span class="na">startNewTransaction</span><span class="o">(</span><span class="k">this</span><span class="o">,</span>
-                                     <span class="n">mTransaction</span><span class="o">,</span>
-                                     <span class="n">animStart</span><span class="o">,</span>
-                                     <span class="n">animEnd</span><span class="o">);</span>
-</code></pre>
-
-<table><thead>
-<tr>
-<th>Tipo</th>
-<th>Parâmetro</th>
-<th>Descrição</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Context</td>
-<td>context</td>
-<td>Contexto da aplicação</td>
-</tr>
-<tr>
-<td>Transaction</td>
-<td>Transaction</td>
-<td>Dados da transação</td>
-</tr>
-<tr>
-<td>Integer</td>
-<td>animStart</td>
-<td>Animação inicial</td>
-</tr>
-<tr>
-<td>Integer</td>
-<td>animEnd</td>
-<td>Animação final</td>
-</tr>
-</tbody></table>
-<h3 id='transaction'>Transaction</h3>
+<p>Após a execução do provider, ele realizará uma chamada de retorno para a sua aplicação (Callback), posteriormente iremos ver um exemplo de como isso funciona.</p>
+<h3 id='mtodos-genricos-dos-providers'>Métodos genéricos dos Providers:</h3>
 <table><thead>
 <tr>
 <th>Método</th>
@@ -318,202 +67,920 @@ O aplicativo da Stone retornará um XML contendo as informações da transação
 </tr>
 </thead><tbody>
 <tr>
-<td>setAmount(String amount)</td>
-<td>Define o valor da transação</td>
+<td>setWorkInBackground (boolean)</td>
+<td>Com este método você irá informar se o provider deverá ou não ser executado em segundo plano. Todos rodam em background por default.</td>
 </tr>
 <tr>
-<td>setTypeOfPurchase(Integer typeOfPurchase)</td>
-<td>Tipo da compra (1- débito ou 2 - crédito )</td>
+<td>setActivity(Activity)</td>
+<td>Para que uma mensagem de feedback seja exibida (caso você passe false no método setWorkInBackground) o Android irá pedir uma activity. Desta forma, ele exibá o Dialog para o usuário com a sua mensagem.</td>
 </tr>
 <tr>
-<td>setTypeOfInstalment(Integer typeParcels)</td>
-<td>Tipo de parcela (0 -  à vista ou 1 - parcelamento)</td>
+<td>setDialogMessage(String)</td>
+<td>Esse método informa qual mensagem será exibida no Dialog de feedback.</td>
 </tr>
 <tr>
-<td>setNumberOfInstalments(Integer numberOfInstalments)</td>
-<td>Número de parcelas da transação</td>
+<td>setDialogTitle(String)</td>
+<td>Esse método informa qual mensagem será exibida no título do Dialog de feedback.</td>
 </tr>
 <tr>
-<td>setDemandId(Integer demandId)</td>
-<td>Uma numeração para a transação</td>
+<td>setConnectionCallback(StoneCallbackInterface)</td>
+<td>Cria uma classe anônima que possui dois métodos onSuccess (método chamado se o provider for executado com sucesso) e onError (método que será chamado se ocorrer uma Exception).</td>
 </tr>
 <tr>
-<td>setNeededConfirm(boolean isNeededConfirm)</td>
-<td>Confirmação das informações pelo usuário</td>
+<td>getListOfErrors()</td>
+<td>Esse método retornará uma lista com os erros que ocorreram.</td>
 </tr>
 </tbody></table>
-<h2 id='starttypedtransaction'>StartTypedTransaction</h2>
-<p>Essa classe envia uma transação digitada para o aplicativo Stone Mobile</p>
+<h3 id='lista-de-providers-disponveis'>Lista de Providers disponíveis</h3>
+<ul>
+<li>ActiveApplicationProvider (Responsável por ativar a sua aplicação)</li>
+<li>BluetoothConnectionProvider (Responsável por criar conexão bluetooth com um pinpad a partir de um mac address)</li>
+<li>CancellationProvider (Responsável por realizar um cancelamento de uma transação)</li>
+<li>DisplayMessageProvider (Exibe uma mensagem de até 32 caracteres na tela do Pinpad)</li>
+<li>DownloadTablesProvider (Responsável por acessar os servidores da Stone e fazer o download das tabelas AIDs e CAPKs)</li>
+<li>LoadTablesProvider (Responsável por enviar as tabelas AIDs e CAPKs para os pinpads, utilize esse provedor caso a transação dê erro 20)</li>
+<li>PrintProvider (Responsável por realizar impressões nos Pinpads que possuem suporte para impressão)</li>
+<li>PrintReceipterProvider (Responsável por realizar impressões de comprovantes de vendas nos Pinpad que possum suporte para impressão)</li>
+<li>SendEmailProvider (Responsável por enviar uma nota eletrônica por email)</li>
+<li>TransactionProvider (Responsável por realizar a captura dos cartões, enviar as transações e manipular as mesmas no banco de transações do dispositivo)</li>
+<li>ValidateTransactionByCardProvider (Verifica se existe transação para o cartão utilizado no TransactionDAO);</li>
+</ul>
+<h2 id='utils'>Utils</h2>
+<p>No modulo Utils, você possui ferramentas que podem lhe ajudar na criação da sua aplicação.</p>
 
-<p><code class="prettyprint">void StartTypedTransaction.sendTypedTransactionToStoneApplication(Context context, String amount, String PAN, String CVV, String date, Integer numberOfParcels, Integer typeParcels)</code></p>
-<pre><code class="highlight java"><span class="n">StartTransaction</span><span class="o">.</span><span class="na">sendTypedTransactionToStoneApplication</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span>     <span class="c1">// contexto</span>
-                                                        <span class="n">amount</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">(),</span> <span class="c1">// valor em centavos</span>
-                                                        <span class="n">pan</span><span class="o">,</span>                         <span class="c1">// número do cartão</span>
-                                                        <span class="n">cvv</span><span class="o">,</span>                         <span class="c1">// CVV</span>
-                                                        <span class="n">date</span><span class="o">,</span>                        <span class="c1">// expiração</span>
-                                                        <span class="n">numberOfParcel</span><span class="o">,</span>              <span class="c1">// número de parcelas</span>
-                                                        <span class="n">parcelType</span><span class="o">);</span>                 <span class="c1">// tipo de parcelas</span>
+<p>Com esse modulo você terá as seguintes ferramentas:</p>
+
+<ul>
+<li>ConnectionValidator (teste de conexão)</li>
+<li>Utilities (utilitários para a sua aplicação, por exemplo, nomalizador de Strings)</li>
+<li>GlobalInformations (informações que ficam compartilhadas entre a sua aplicação e a SDK)</li>
+<li>StopWatch (um simples cronômetro para benchmark)</li>
+<li>Criptografia e descriptografia</li>
+<li>ConnectionPost (realiza post para uma aplicação REST utilizando XML)</li>
+<li>TransactionDAO (banco de transações, as transação são salvas e atualizadas durante a execução do TransactionProvider)</li>
+<li>PinpadDAO (banco de pinpads já conectados)</li>
+<li>ApplicationCache (CRUD para a sua aplicação, ele trabalha na pasta ‘file’ da sua aplicação)</li>
+</ul>
+<h2 id='comandos-e-outros'>Comandos e Outros</h2>
+<p>Esse módulo contém os comandos de leitura e escrita que são utilizados para se comunicar com os Pinpads.</p>
+
+<p>Os mesmos utilizados pelos Providers sempre que necessário.</p>
+<h1 id='tutorial-de-integrao'>Tutorial de integração</h1><h2 id='preparando-a-sua-aplicao'>Preparando a sua aplicação</h2>
+<p>Para você iniciar a integração com a Stone, existe um repositório no GitHub - <a href="https://github.com/stone-pagamentos/sdk-android-V2">https://github.com/stone-pagamentos/sdk-android-V2</a> - no qual você pode obter o nosso app demo que te ajudará a integrar de uma forma rápida com a SDK e os JARs de integração.</p>
+
+<p>No repositório, os JARs de integração estão divididos em duas partes, /JARs/Stone/ contém um único jar com as seguintes dependências:</p>
+<h3 id='para-envio-de-email'>Para envio de email</h3>
+<ul>
+<li>Mail.jar</li>
+<li>Activation.jar</li>
+<li>Additional.jar</li>
+</ul>
+<h3 id='base64-encoder'>Base64 Encoder</h3>
+<ul>
+<li>Commons-codec.jar</li>
+</ul>
+<h3 id='json'>JSON</h3>
+<ul>
+<li>Gson_v1.7.2.jar</li>
+</ul>
+<h3 id='xml'>XML</h3>
+<ul>
+<li>XStream_v1.4.7.jar</li>
+</ul>
+
+<aside class="notice">Nós recomendamos que os integradores utilizem esse único .jar</aside>
+
+<p>Os JARs que estão na pasta /JARs/Dependências/ são todos os JARs que foram mencionados e o .jar da Stone. Você pode utilizer isso caso você já possua uma destas libs em sua aplicação.</p>
+<h2 id='iniciando-a-integrao'>Iniciando a integração</h2>
+<p>Após adicionar o .jar de integração no seu projeto, é importante que você chame o método na Main do seu projeto:</p>
+<pre><code class="highlight java"><span class="n">StoneStart</span><span class="o">.</span><span class="na">init</span><span class="o">(</span> <span class="o">[</span><span class="n">SUA</span> <span class="n">MAIN</span> <span class="n">ACTIVITY</span><span class="o">]</span> <span class="o">)</span>
 </code></pre>
+
+<p>Esse método irá retornar uma lista de objetos do tipo UserModel.</p>
+
+<p>UserModel representa o seu usuário, ele irá carregar as informações em cache (estas informações são utilizadas constantemente pela SDK). Caso esse método retorne null, indica que você não fez a chamada do provider ActiveApplicationProvider, como temos de exemplo o código ao lado:</p>
+<pre><code class="highlight java"><span class="cm">/* Este deve ser, obrigatoriamente, o primeiro método
+ * a ser chamado. É um método que trabalha com sessão.
+ */</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">UserModel</span><span class="o">&gt;</span> <span class="n">listOfUser</span> <span class="o">=</span> <span class="n">StoneStart</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="n">SUA_MAIN_ACTIVITY_AQUI</span><span class="o">);</span>
+
+<span class="c1">// se o retorno for nulo, então você provavelmente não ativou a SDK</span>
+<span class="c1">// ou as informações da Stone SDK foram excluídas.</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">listOfUser</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+
+  <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">stoneCodeToActiveList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+
+  <span class="n">stoneCodeToActiveList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">STONE_PRODUCTION_KEY</span><span class="o">);</span>
+
+  <span class="n">ActiveApplicationProvider</span> <span class="n">activeApplicationProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">activeApplicationProvider</span><span class="o">(</span><span class="n">SUA_MAIN_ACTIVITY_AQUI</span><span class="o">,</span> <span class="n">stoneCodeToActiveList</span><span class="o">);</span> <span class="c1">// você deve colocar seu StoneCode aqui</span>
+
+  <span class="n">activeApplicationProvider</span><span class="o">.</span><span class="na">setDialogMessage</span><span class="o">(</span><span class="s">"Ativando o aplicativo..."</span><span class="o">);</span>
+  <span class="n">activeApplicationProvider</span><span class="o">.</span><span class="na">setDialogTitle</span><span class="o">(</span><span class="s">"Aguarde"</span><span class="o">);</span>
+  <span class="n">activeApplicationProvider</span><span class="o">.</span><span class="na">setWorkInBackground</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+  <span class="n">activeApplicationProvider</span><span class="o">.</span><span class="na">setConnectionCallback</span><span class="o">(</span><span class="k">new</span> <span class="n">StoneCallbackInterface</span><span class="o">()</span> <span class="o">{</span>
+    <span class="cm">/* Sempre que utilizar um provider, instancie essa interface.
+     * Ela irá lhe informar ser o provider foi executado com sucesso ou não.
+     */</span>
+
+    <span class="cm">/* Método chamado se for executado sem erros */</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">onSuccess</span><span class="o">()</span> <span class="o">{</span>
+      <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="s">"Ativado com sucesso, iniciando o aplicativo"</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+      <span class="n">continueApplication</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* Método chamado caso ocorra alguma exceção */</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">onError</span><span class="o">()</span> <span class="o">{</span>
+      <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="s">"Erro na ativação do aplicativo, verifique a lista de erros do provider"</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+
+      <span class="c1">// chame o método abaixo para verificar a lista de erros.</span>
+      <span class="c1">// activeApplicationProvider.getListOfErrors();</span>
+    <span class="o">}</span>
+  <span class="o">});</span>
+
+  <span class="n">activeApplicationProvider</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+  <span class="cm">/* Caso sua aplicação já tenha as informações do SDK e chamado o ActiveApplicationProvider
+   * anteriormente, sua aplicação poderá seguir o fluxo normal
+   */</span>
+
+  <span class="n">continueApplication</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>Feito isso e sua SDK estando ativada, você está pronto para iniciar suas transações.</p>
+<h2 id='conexo-bluetooth'>Conexão Bluetooth</h2>
+<p>A conexão Bluetooth é realizada também pela SDK, você deverá utilizar o BluetoothConnectionProvider para criar conexões com os Pinpads.</p>
+
+<p>Nós recomendamos que você liste todos os aparelhos que já foram conectados com o dispositivo na sua aplicação com a função “BluetoothAdapter.getBondedDevices()” do Android. Ela retornará o histórico de aparelhos do Bluetooth.</p>
+
+<p>Para utilizar o BluetoothConnectionProvider, você precisará passar um parâmetro do tipo PinpadObject.</p>
+
+<p>Este objeto representa um Pinpad com os seguintes atributos:</p>
 
 <table><thead>
 <tr>
 <th>Tipo</th>
-<th>Parâmetro</th>
-<th>Descrição</th>
+<th>Nome</th>
+<th>Função</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>Context</td>
-<td>context</td>
-<td>Contexto da aplicação</td>
+<td>Integer</td>
+<td>id</td>
+<td>ID do Pinpad quando for carregado pelo PinpadDAO</td>
 </tr>
+<tr>
+<td>String</td>
+<td>name</td>
+<td>Nome do Pinpad (format: MODELO-SERIAL)</td>
+</tr>
+<tr>
+<td>String</td>
+<td>macAddress</td>
+<td>Mac address do dispositivo bluetooth</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>printSupport</td>
+<td>Se o Pinpad possui suporte para impressão</td>
+</tr>
+<tr>
+<td>String</td>
+<td>timeToConnect</td>
+<td>Tempo que levou para criar a última conexão</td>
+</tr>
+<tr>
+<td>int</td>
+<td>majorDevice</td>
+<td>O tipo do Bluetooth (headset, phone, pc&hellip;..)</td>
+</tr>
+</tbody></table>
+
+<p>Para passar criar uma conexão, basta instanciar um objeto do tipo PinpadObject e informar o nome e o mac address do dispositivo. Estas informações pode ser obtidas com os itens que são retornados da função BluetoothAdapter.getBondedDevices();” do Android.</p>
+
+<p>Feito isso e conexão realizada com sucesso, o Pinpad será adicionado em uma lista de Pinpads conectados na classe GlobalInformations, para obter a lista, você pode utilizar o método GlobalInformations .getPinpadListSize(). Esse método pode te retornar null caso o Bluetooth esteja desligado ou não havendo conexão.</p>
+
+<p>Sempre que a SDK solicitar um Pinpad como parâmetro, você pode passar GlobalInformations .getPinpadFromListAt(0), <em>se você estiver conectado somente com um pinpad</em>.</p>
+<h2 id='provedor-de-transao'>Provedor de transação</h2>
+<p>Passar transações com a nova SDK é simples e rápido. A primeira coisa que deve se fazer é instanciar um objeto do tipo StoneTransaction.</p>
+<pre><code class="highlight java"><span class="c1">// passe o PinPAD que você está conectado. Apenas para lembrar, se você estiver conectado</span>
+<span class="c1">// com apenas 1 PinPAD, você deve passar GlobalInformations.GlobalInformations.getPinpadFromListAt(0)</span>
+<span class="n">StoneTransaction</span> <span class="n">stoneTransaction</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StoneTransaction</span><span class="o">(</span><span class="n">PIN_PAD_QUE_VOCE_ESTA_CONECTADO</span><span class="o">);</span>
+</code></pre>
+
+<p>Esse objeto representa a sua transação que será enviada. Ela possui os seguintes atributos:</p>
+
+<table><thead>
+<tr>
+<th>Tipo</th>
+<th>Nome</th>
+<th>Função</th>
+</tr>
+</thead><tbody>
 <tr>
 <td>String</td>
 <td>amount</td>
-<td>Valor da transação <strong>em centavos</strong></td>
-</tr>
-<tr>
-<td>String</td>
-<td>PAN</td>
-<td>Número do cartão do cliente</td>
-</tr>
-<tr>
-<td>String</td>
-<td>CVV</td>
-<td>Código de segurança do verso do cartão</td>
-</tr>
-<tr>
-<td>String</td>
-<td>date</td>
-<td>Data de expiração do cartão</td>
-</tr>
-<tr>
-<td>Integer</td>
-<td>numberOfParcels</td>
-<td>Número de parcelas (se houve parcerlamento)</td>
-</tr>
-<tr>
-<td>Integer</td>
-<td>typeOfParcels</td>
-<td>Tipo de parcela (0 - à vista, 1 - lojista, 2 - emissor</td>
-</tr>
-</tbody></table>
-<h2 id='startcancellation'>StartCancellation</h2>
-<p>Essa classe permite o cancelamento de transações</p>
-
-<p><code class="prettyprint">void StartCancellation.sendCancellationToStoneApplication(Context context, String arn, String ca)</code></p>
-<pre><code class="highlight java"><span class="n">StartCancellation</span><span class="o">.</span><span class="na">sendCancellationToStoneApplication</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="c1">// contexto</span>
-                                                     <span class="n">arn</span><span class="o">,</span>                     <span class="c1">// Numeração da transação</span>
-                                                     <span class="n">ca</span><span class="o">);</span>                     <span class="c1">// Código da transação</span>
-</code></pre>
-
-<table><thead>
-<tr>
-<th>Tipo</th>
-<th>Parâmetro</th>
-<th>Descrição</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Context</td>
-<td>context</td>
-<td>Contexto da aplicação</td>
-</tr>
-<tr>
-<td>String</td>
-<td>arn</td>
-<td>Numeração da transação</td>
-</tr>
-<tr>
-<td>String</td>
-<td>ca</td>
-<td>Código da transação</td>
-</tr>
-</tbody></table>
-<h2 id='transactionresponse'>TransactionResponse</h2>
-<p><code class="prettyprint">ReturnOfTransactionXml getTransaction(Activity activity, String xmlReceive, Bundle backActivity)</code></p>
-<pre><code class="highlight java"><span class="n">mReturnOfTransactionXml</span> <span class="o">=</span> <span class="n">TransactionResponse</span><span class="o">.</span><span class="na">getTransaction</span><span class="o">(</span><span class="k">this</span><span class="o">,</span><span class="n">xmlTransaction</span><span class="o">,</span><span class="n">backActivity</span><span class="o">);</span>
-</code></pre>
-
-<table><thead>
-<tr>
-<th>Tipo</th>
-<th>Parâmetro</th>
-<th>Descrição</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Activity</td>
-<td>activity</td>
-<td>Contexto da aplicação</td>
-</tr>
-<tr>
-<td>String</td>
-<td>xmlReceive</td>
-<td>A String ‘xml’ recebe uma String contida na variável ‘backActivity’. A mesma deve ser passada, apenas.</td>
-</tr>
-<tr>
-<td>Bundle</td>
-<td>backActivity</td>
-<td>O retorno da Intent</td>
-</tr>
-</tbody></table>
-<h2 id='returnoftransactionxml'>ReturnOfTransactionXML</h2>
-<p>OBS: Todos os valores que são passados, são retornados para futuras comparações, caso isso seja importante para o desenvolvedor.</p>
-
-<table><thead>
-<tr>
-<th>Tipo</th>
-<th>Parâmetro</th>
-<th>Descrição</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>String</td>
-<td>Flag</td>
-<td>MASTERCARD ou VISA</td>
-</tr>
-<tr>
-<td>String</td>
-<td>Arn</td>
-<td>Numeração da transação</td>
-</tr>
-<tr>
-<td>String</td>
-<td>Amount</td>
 <td>Valor da transação</td>
 </tr>
 <tr>
 <td>String</td>
-<td>Date</td>
-<td>Formato: YYYY-MM-dd HH:mm:ss</td>
+<td>requestId</td>
+<td>Id do pedido</td>
 </tr>
 <tr>
 <td>String</td>
-<td>CA</td>
-<td>Código de autorização</td>
+<td>initiatorTransactionKey</td>
+<td>Esse é um identificador da transação que aparece no portal. A SDK possui um padrão próprio para gerar um identificador único e usará esse padrão se um identificador não for definido. Caso você queira passar o seu próprio identificador, certifique-se que ele será sempre único para todos os seus clientes.</td>
+</tr>
+<tr>
+<td>EmailClient</td>
+<td>emailClient</td>
+<td>Seu email de noReply para envio do comprovante eletrônico</td>
+</tr>
+<tr>
+<td>InstalmentTransactionEnum</td>
+<td>instalmentTransactionEnum</td>
+<td>Quantidade de parcelas, mais informações na tabela abaixo</td>
+</tr>
+<tr>
+<td>TypeOfTransactionEnum</td>
+<td>typeOfTransactionEnum</td>
+<td>Tipo da transação: débito ou crédito</td>
+</tr>
+<tr>
+<td>PinpadObject</td>
+<td>pinpadObject</td>
+<td>O pinpad que você deseja passar a transação</td>
 </tr>
 <tr>
 <td>String</td>
-<td>Parcel</td>
-<td>Número de parcelas</td>
-</tr>
-<tr>
-<td>String</td>
-<td>Status</td>
-<td>APR ou DEC</td>
-</tr>
-<tr>
-<td>String</td>
-<td>TransactionType</td>
-<td>1 – débito; 2 – crédito</td>
-</tr>
-<tr>
-<td>Long</td>
-<td>DemandID</td>
-<td>Número do ID do pedido</td>
+<td>shortName</td>
+<td>Nome de exibição no extrato do cliente (máximo de 14 caracteres)</td>
 </tr>
 </tbody></table>
+
+<p>Para a StoneTransaction, a quantidade de parcelas é passada por um enum chamado InstalmentTransactionEnum, segue a tabela com cada nome e valor:</p>
+
+<table><thead>
+<tr>
+<th>Nome</th>
+<th>Valor</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ONE_INSTALMENT</td>
+<td>À vista</td>
+</tr>
+<tr>
+<td>TWO_INSTALMENT_NO_INTEREST</td>
+<td>2 vezes sem juros</td>
+</tr>
+<tr>
+<td>THREE_INSTALMENT_NO_INTEREST</td>
+<td>3 vezes sem juros</td>
+</tr>
+<tr>
+<td>FOUR_INSTALMENT_NO_INTEREST</td>
+<td>4 vezes sem juros</td>
+</tr>
+<tr>
+<td>FIVE_INSTALMENT_NO_INTEREST</td>
+<td>5 vezes sem juros</td>
+</tr>
+<tr>
+<td>SIX_INSTALMENT_NO_INTEREST</td>
+<td>6 vezes sem juros</td>
+</tr>
+<tr>
+<td>SEVEN_INSTALMENT_NO_INTEREST</td>
+<td>7 vezes sem juros</td>
+</tr>
+<tr>
+<td>EIGHT_INSTALMENT_NO_INTEREST</td>
+<td>8 vezes sem juros</td>
+</tr>
+<tr>
+<td>NINE_INSTALMENT_NO_INTEREST</td>
+<td>9 vezes sem juros</td>
+</tr>
+<tr>
+<td>TEN_INSTALMENT_NO_INTEREST</td>
+<td>10 vezes sem juros</td>
+</tr>
+<tr>
+<td>ELEVEN_INSTALMENT_NO_INTEREST</td>
+<td>11 vezes sem juros</td>
+</tr>
+<tr>
+<td>TWELVE_INSTALMENT_NO_INTEREST</td>
+<td>12 vezes sem juros</td>
+</tr>
+<tr>
+<td>TWO_INSTALMENT_WITH_INTEREST</td>
+<td>2 vezes com juros</td>
+</tr>
+<tr>
+<td>THREE_INSTALMENT_WITH_INTEREST</td>
+<td>3 vezes com juros</td>
+</tr>
+<tr>
+<td>FOUR_INSTALMENT_WITH_INTEREST</td>
+<td>4 vezes com juros</td>
+</tr>
+<tr>
+<td>FIVE_INSTALMENT_WITH_INTEREST</td>
+<td>5 vezes com juros</td>
+</tr>
+<tr>
+<td>SIX_INSTALMENT_WITH_INTEREST</td>
+<td>6 vezes com juros</td>
+</tr>
+<tr>
+<td>SEVEN_INSTALMENT_WITH_INTEREST</td>
+<td>7 vezes com juros</td>
+</tr>
+<tr>
+<td>EIGHT_INSTALMENT_WITH_INTEREST</td>
+<td>8 vezes com juros</td>
+</tr>
+<tr>
+<td>NINE_INSTALMENT_WITH_INTEREST</td>
+<td>9 vezes com juros</td>
+</tr>
+<tr>
+<td>TEN_INSTALMENT_WITH_INTEREST</td>
+<td>10 vezes com juros</td>
+</tr>
+<tr>
+<td>ELEVEN_INSTALMENT_WITH_INTEREST</td>
+<td>11 vezes com juros</td>
+</tr>
+<tr>
+<td>TWELVE_INSTALMENT_WITH_INTEREST</td>
+<td>12 vezes com juros</td>
+</tr>
+</tbody></table>
+<pre><code class="highlight java"><span class="c1">// a seguir deve popular o objeto</span>
+<span class="n">stoneTransaction</span><span class="o">.</span><span class="na">setAmount</span><span class="o">(</span><span class="n">valueEditText</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+<span class="n">stoneTransaction</span><span class="o">.</span><span class="na">setEmailClient</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+<span class="n">stoneTransaction</span><span class="o">.</span><span class="na">setRequestId</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+
+<span class="cm">/* AVISO IMPORTANTE: Não é recomendado alterar o campo abaixo do
+ * ITK, pois ele gera um valor único. Contudo, caso seja necessário,
+ * faça conforme a linha abaixo:
+ */</span>
+
+<span class="n">stoneTransaction</span><span class="o">.</span><span class="na">setInitiatorTransactionKey</span><span class="o">(</span><span class="s">"SEU_IDENTIFICADOR_UNICO_AQUI"</span><span class="o">);</span>
+
+<span class="c1">// informa a quantidade de parcelas</span>
+
+<span class="n">stoneTransaction</span><span class="o">.</span><span class="na">setInstallmentTransactionEnum</span><span class="o">(</span><span class="n">installmentsSpinner</span><span class="o">.</span><span class="na">getSelectedItemPosition</span><span class="o">());</span>
+
+<span class="c1">// verificação de que a forma de pagamento foi selecionada</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">debitRadioButton</span><span class="o">.</span><span class="na">isChecked</span><span class="o">()</span> <span class="o">==</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+   <span class="n">stoneTransaction</span><span class="o">.</span><span class="na">setTypeOfTransaction</span><span class="o">(</span><span class="n">TypeOfTransactionEnum</span><span class="o">.</span><span class="na">DEBIT</span><span class="o">);</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+   <span class="n">stoneTransaction</span><span class="o">.</span><span class="na">setTypeOfTransaction</span><span class="o">(</span><span class="n">TypeOfTransactionEnum</span><span class="o">.</span><span class="na">CREDIT</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>Após instanciar e popular o objeto StoneTransaction, você poderá passar o mesmo para o TransactionProvider, que será o responsável por enviar a transação para o autorizador e trabalhar com a inserção e atualização no TransactionDAO.</p>
+
+<p>Lembrando que TransactionProvider segue a mesma estrutura do ActiveApplicationProvider, BluetoothConnectionProvider e os demais. Esse provider pede uma Activity e a StoneTransaction que foi criada anteriormente.</p>
+
+<p>Seguindo o exemplo ao lado:</p>
+<pre><code class="highlight java"><span class="c1">// processo de envio da transação</span>
+<span class="kd">final</span> <span class="n">TransactionProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TransactionProvider</span><span class="o">(</span><span class="n">SUA_ACTIVITY_AQUI</span><span class="o">,</span> <span class="n">stoneTransaction</span><span class="o">);</span>
+
+<span class="n">provider</span><span class="o">.</span><span class="na">setDialogMessage</span><span class="o">(</span><span class="s">"Enviando"</span><span class="o">);</span>
+<span class="n">provider</span><span class="o">.</span><span class="na">setDialogTitle</span><span class="o">(</span><span class="s">"Aguarde"</span><span class="o">);</span>
+<span class="n">provider</span><span class="o">.</span><span class="na">setWorkInBackground</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+
+<span class="n">provider</span><span class="o">.</span><span class="na">setConnectionCallback</span><span class="o">(</span><span class="k">new</span> <span class="n">StoneCallbackInterface</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">onSuccess</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">onError</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+<span class="o">});</span>
+
+<span class="n">provider</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+</code></pre>
+
+<p>Após a execução do provider, a sua aplicação receberá uma chamada no método onSuccess() ou onError().</p>
+
+<p>Para ter acesso ao status da transação, você deve utilizar o método getTransactionStatus() que retornará um enum com os seguintes valores:</p>
+
+<p>|Nome|Valor|
+|UNKOWN|Ocorreu um erro antes de ser enviada para o autorizador|
+|APPROVED|Transação aprovada com sucesso|
+|DECLINED|Transação negada|
+|CANCELLED|Transação cancelada (ocorre no cancelamento, CancellationProvider)|
+|PARTIAL_APPROVED|Transação foi parcialmente aprovada|
+|TECHNICAL_ERROR|Erro técnico (ocorreu um erro ao processor a mensagem no autorizador)|
+|REJECTED|Transação rejeitada|</p>
+
+<p>Em caso de REJECTED e DECLINED, você pode capturar a mensagem do autorizador com o método getMessageFromAuthorize(). Mensagens como por exemplo: “Saldo insuficiente”, “Cartão inválido”, “Violação de segurança”..</p>
+
+<aside class="notice"><strong>Observação:</strong> O Pinpad que será utilizado na transação, será o que foi passado como parâmetro na instancia do StoneTransaction.</aside>
+<h2 id='provedor-de-impresso'>Provedor de impressão</h2>
+<p>O provedor de impressão, PrintProvider, pode ser utilizado apenas com pinpads que possuem suporte a print.</p>
+
+<p>Na assinatura do construtor, o PrintProvider irá pedir três parâmetros, uma Activity, uma lista de PrintObject e o Pinpad que irá imprimir o seu comprovante.</p>
+
+<p>PrintObject representa cada linha que será impressa pelo PrintProvider.</p>
+
+<table><thead>
+<tr>
+<th>Tipo</th>
+<th>Nome</th>
+<th>Função</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>String</td>
+<td>message</td>
+<td>Mensagem que será impressa (por linha)</td>
+</tr>
+<tr>
+<td>Integer</td>
+<td>size</td>
+<td>Tamanho da impressão, SMALL, MEDIUM ou BIG, todos dentro do objeto PrintObject</td>
+</tr>
+<tr>
+<td>Integer</td>
+<td>align</td>
+<td>Alinhamento da impressão, LEFT, CENTER ou RIGHT, todos dentro do objeto PrintObject</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">Para impressão de QR Code, é necessário passar ‘TAG_PRINT’ como size e align. Sua mensagem que será enviada dentro do QR Code deve conter no máximo 512 caracteres.</aside>
+<pre><code class="highlight java"><span class="c1">// lógica de impressão</span>
+<span class="c1">// declara a lista de impressão,</span>
+<span class="c1">// lembrando o que cada item representa</span>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">PrintObject</span><span class="o">&gt;</span> <span class="n">listToPrint</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">PrintObject</span><span class="o">&gt;();</span>
+
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+  <span class="n">listToPrint</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">PrintObject</span><span class="o">(</span><span class="s">"Teste de impressão linha "</span> <span class="o">+</span> <span class="n">i</span><span class="o">,</span> <span class="n">PrintObject</span><span class="o">.</span><span class="na">MEDIUM</span><span class="o">,</span> <span class="n">PrintObject</span><span class="o">.</span><span class="na">CENTER</span><span class="o">));</span>
+<span class="o">}</span>
+
+<span class="kd">final</span> <span class="n">PrintProvider</span> <span class="n">printProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PrintProvider</span><span class="o">(</span><span class="n">SUA_ACTIVITY_AQUI</span><span class="o">,</span> <span class="n">listToPrint</span><span class="o">,</span> <span class="n">O_PINPAD_QUE_VOCE_VAI_USAR</span><span class="o">);</span>
+
+<span class="n">printProvider</span><span class="o">.</span><span class="na">setWorkInBackground</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+<span class="n">printProvider</span><span class="o">.</span><span class="na">setDialogMessage</span><span class="o">(</span><span class="s">"Imprimindo"</span><span class="o">);</span>
+<span class="n">printProvider</span><span class="o">.</span><span class="na">setConnectionCallback</span><span class="o">(</span><span class="k">new</span> <span class="n">StoneCallbackInterface</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">onSuccess</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">onError</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+<span class="o">});</span>
+
+<span class="n">printProvider</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+</code></pre>
+
+<p>A SDK irá interpreter cada item da sua lista (cada PrintObject) como uma linha a ser impressa.</p>
+
+<p>Com o código que foi passado na imagem anterior, ele rodará um for e criar 10 linhas de impressão. O provider será executado e terá o seguinte resultado:</p>
+
+<p><img alt="Comprovante" src="images/comprovante.png" /></p>
+
+<aside class="notice">Por padrão, todas as notinhas são impressas com a logo da Stone.</aside>
+<h2 id='provedor-de-impresso---recibo'>Provedor de impressão - Recibo</h2>
+<p>O provedor de impressão, PrintReceiptProvider, pode ser utilizado apenas com pinpads que possuem suporte a print.</p>
+
+<p>Na assinatura do construtor, o PrintProvider irá pedir quatro parâmetros, um Context, um PinpadObject (Pinpad que irá imprimir o seu comprovante), o ID da transação que deseja imprimir e um UserModel que representa o seu usuário, que contém as informações necessárias para a impressão.</p>
+<pre><code class="highlight java"><span class="kd">final</span> <span class="n">PrintReceiptProvider</span> <span class="n">printReceiptProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">printReceiptProvider</span><span class="o">(</span><span class="n">SUA_CONTEXT_AQUI</span><span class="o">,</span> <span class="n">GlobalInformations</span><span class="o">.</span><span class="na">getPinpadFromListAt</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span>
+                                                                           <span class="n">idTransaction</span><span class="o">,</span> <span class="n">GlobalInformations</span><span class="o">.</span><span class="na">getUserModel</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+
+<span class="n">printReceiptProvider</span><span class="o">.</span><span class="na">setWorkInBackground</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+<span class="n">printReceiptProvider</span><span class="o">.</span><span class="na">setDialogMessage</span><span class="o">(</span><span class="s">"Imprimindo"</span><span class="o">);</span>
+<span class="n">printReceiptProvider</span><span class="o">.</span><span class="na">setConnectionCallback</span><span class="o">(</span><span class="k">new</span> <span class="n">StoneCallbackInterface</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">onSuccess</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">onError</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+<span class="o">});</span>
+
+<span class="n">printReceiptProvider</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+</code></pre>
+
+<p><img alt="Recibo" src="images/recibo.png" /></p>
+
+<p>A SDK montará todo o comprovante automaticamente (de acordo com o id de transação fornecido e contato que o transação exista no TransactionDAO).</p>
+
+<aside class="notice">Por padrão, todas as notinhas são impressas com a logo da Stone.</aside>
+<h2 id='provedor-de-cancelamento'>Provedor de cancelamento</h2>
+<p>O provider de Cancelamento, CancellationProvider, é um dos provedores mais simples.</p>
+
+<p>Para efetuar um cancelamento, você deve instanciar o CancellationProvider e passar sua Activity e o ID da transação que deseja passar (você pode obter todos os IDs das transações com o TransactionDAO).</p>
+
+<aside class="notice"><strong>Observação:</strong> Recomendamos que use o provedor ValidateTransactionByCardProvider para validar se a transação que será cancelada foi realizada com o mesmo cartão que consta no TransactionDAO.</aside>
+<h2 id='provedor-de-display'>Provedor de Display</h2>
+<p>DisplayMessageProvider exibe uma mensagem de até 32 caracteres a tela do Pinpad.</p>
+<h2 id='provedor-de-email'>Provedor de Email</h2>
+<p>SendEmailProvider é o provedor responsável pelo envio do email. Ele serve apenas para enviar um email, não o comprovante eletrônico da sua transação.</p>
+
+<p>Esse provider pedirá um objeto do tipo EmailClient, esse objeto represente o seu client de noReply SMTP.</p>
+
+<p>Configurando ele de forma correta, o provedor funcioná normalmente.</p>
+
+<table><thead>
+<tr>
+<th>Tipo</th>
+<th>Nome</th>
+<th>Função</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>String</td>
+<td>smtpHost</td>
+<td>Host do seu cliente de email</td>
+</tr>
+<tr>
+<td>String</td>
+<td>smtpPort</td>
+<td>Porta do host (default: 587)</td>
+</tr>
+<tr>
+<td>String</td>
+<td>sport</td>
+<td>Secure port do host (default: 587)</td>
+</tr>
+<tr>
+<td>String</td>
+<td>user</td>
+<td>Seu usuário de login</td>
+</tr>
+<tr>
+<td>String</td>
+<td>password</td>
+<td>Sua senha de login</td>
+</tr>
+<tr>
+<td>String</td>
+<td>from</td>
+<td>Seu email</td>
+</tr>
+<tr>
+<td>String</td>
+<td>sendTo</td>
+<td>Email do seu cliente</td>
+</tr>
+<tr>
+<td>String</td>
+<td>subject</td>
+<td>Assunto do email</td>
+</tr>
+<tr>
+<td>String</td>
+<td>messageToSent</td>
+<td>Mensagem que será enviada</td>
+</tr>
+</tbody></table>
+
+<aside class="warning">Por questões de esclarecimentos, a Stone não faz nenhum log dos e-mails enviados. Ou seja, seu login e senha utilizados para enviar o e-mail, não serão salvos em momento nenhum por parte da SDK.</aside>
+
+<p>Para criar o comprovante eletrônico, o seu objeto de EmailClient possui um método chamado receiptAsHtml(Context, transactionId). Ele retornará uma String e a mesma deve ser passada como parâmetro no SendEmailProvider como mensagem para enviar.</p>
+<h2 id='provedor-de-tabelas-aid-e-capk'>Provedor de tabelas AID e CAPK</h2>
+<p>O DownloadTablesProvider é o provedor de tabelas, isso é muito importante de ser chamado sempre na Main da sua aplicação. As tabelas AID e CAPK, resumidamente falando, são tabelas que ficam armazenadas nos Pinpads e os dizem como trabalhar com cada tipo de cartão. Esse provider só possui a função de acessar os serviços da Stone e baixa-las para o dispositivo.</p>
+
+<p>Utilize um objeto do tipo ApplicationCache (módulo Utils) para verificar se existem ou não as tabelas.</p>
+<pre><code class="highlight java"><span class="c1">// IMPORTANTE: Mantenha esse provider em sua main pois ele irá</span>
+<span class="c1">// baixar as tabelas AIDs e CAPKs dos servidores da Stone e será</span>
+<span class="c1">// utilizada quando necessário.</span>
+<span class="n">ApplicationCache</span> <span class="n">applicationCache</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ApplicationCache</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">());</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">applicationCache</span><span class="o">.</span><span class="na">checkIfHasTables</span><span class="o">()</span> <span class="o">==</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// realiza o download das tabelas</span>
+  <span class="n">DownloadTablesProvider</span> <span class="n">downloadTablesProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DownloadTablesProvider</span><span class="o">(</span><span class="n">SUA_ACTIVITY_AQUI</span><span class="o">);</span>
+
+  <span class="n">downloadTablesProvider</span><span class="o">.</span><span class="na">setDialogMessage</span><span class="o">(</span><span class="s">"Baixando as tabelas, por favor aguarde"</span><span class="o">);</span>
+  <span class="n">downloadTablesProvider</span><span class="o">.</span><span class="na">setWorkInBackground</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+  <span class="n">downloadTablesProvider</span><span class="o">..</span><span class="na">setConnectionCallback</span><span class="o">(</span><span class="k">new</span> <span class="n">StoneCallbackInterface</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">onSuccess</span><span class="o">()</span> <span class="o">{</span>
+      <span class="c1">// ...</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">onError</span><span class="o">()</span> <span class="o">{</span>
+      <span class="c1">// ...</span>
+    <span class="o">}</span>
+  <span class="o">});</span>
+
+  <span class="n">downloadTablesProvider</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>É importante deixar claro também que esse provider só possui a função de baixar as tabelas. A função de carregar as tabelas nos Pinpads é responsabilidade do LoadTablesProvider. Este deve ser chamado, caso o TransactionProvider retorne um erro de <strong>DIFFERENT_TABLES_EMV</strong> (veremos logo o que isso quer dizer).</p>
+<h2 id='provedor-de-validao-de-transao'>Provedor de validação de transação</h2>
+<p>O ValidateTransactionByCardProvider é o provedor de que verifica se existe no TransactionDAO, transações realizadas para um determinado cartão.</p>
+
+<p>Na assinatura do construtor, o ValidateTransactionByCardProvider irá pedir dois parâmetros, um Context, um PinpadObject (Pinpad em que será inserido o cartão).</p>
+<pre><code class="highlight java"><span class="kd">final</span> <span class="n">ValidateTransactionByCardProvider</span> <span class="nf">validateTransactionByCardProvider</span><span class="p">(</span><span class="n">SUA_ACTIVITY_AQUI</span><span class="o">,</span> <span class="n">O_PINPAD_QUE_VOCE_VAI_USAR</span><span class="o">);</span>
+
+<span class="n">validateTransactionByCardProvider</span><span class="o">.</span><span class="na">setDialogMessage</span><span class="o">(</span><span class="s">"Validando Transação"</span><span class="o">);</span>
+<span class="n">validateTransactionByCardProvider</span><span class="o">.</span><span class="na">setDialogTitle</span><span class="o">(</span><span class="s">"Aguarde"</span><span class="o">);</span>
+<span class="n">validateTransactionByCardProvider</span><span class="o">.</span><span class="na">setWorkInBackground</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+<span class="n">validateTransactionByCardProvider</span><span class="o">.</span><span class="na">setConnectionCallback</span><span class="o">(</span><span class="k">new</span> <span class="n">StoneCallbackInterface</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">onSuccess</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// para saber se existem transações com esse cartão:</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">TransactionObject</span><span class="o">&gt;</span> <span class="n">transactionsWithThisCard</span> <span class="o">=</span> <span class="n">validateTransactionByCardProvider</span><span class="o">.</span><span class="na">getTransactionsWithCurrentCard</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">onError</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+  <span class="o">}</span>
+<span class="o">});</span>
+
+<span class="n">validateTransactionByCardProvider</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+</code></pre>
+<h1 id='tipos-de-response'>Tipos de Response</h1><h2 id='introduo'>Introdução</h2>
+<p>Quando nos referimos a “Response”, não estamos falando exatamente de response de algum request para os servidores da Stone. Vamos dividir o assunto entre responses da biblioteca compartilhada e responses da SDK.</p>
+
+<p>Observando a seguinte imagem:</p>
+
+<p><img alt="Tipos de response" src="images/tipos-response.png" /></p>
+
+<p>Os Status de comandos são referentes as respostas que são dadas pela biblioteca compartilhada, mais abaixo você verá uma lista com as possíveis respostas e o que cada uma significa.</p>
+
+<p>Os Status do provider são referentes aos erros que podem ter durante a execução de determinados providers.</p>
+<h2 id='status-de-comandos'>Status de Comandos</h2>
+<table><thead>
+<tr>
+<th>Nome</th>
+<th>Valor</th>
+<th>Significado</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>COMMAND_OK</td>
+<td>0</td>
+<td>Comando executado com sucesso</td>
+</tr>
+<tr>
+<td>NO_SECURE_COMMUNICATION</td>
+<td>3</td>
+<td>Não foi estabelecida uma conexão segura com o Pinpad</td>
+</tr>
+<tr>
+<td>PRESS_1</td>
+<td>4</td>
+<td>Pressione F1</td>
+</tr>
+<tr>
+<td>PRESS_2</td>
+<td>5</td>
+<td>Pressione F2</td>
+</tr>
+<tr>
+<td>PRESS_3</td>
+<td>6</td>
+<td>Pressione F3</td>
+</tr>
+<tr>
+<td>PRESS_4</td>
+<td>7</td>
+<td>Pressione F4</td>
+</tr>
+<tr>
+<td>PRESS_BACKSPACE</td>
+<td>8</td>
+<td>Pressione espaço</td>
+</tr>
+<tr>
+<td>DEC_ERROR</td>
+<td>9</td>
+<td>Erro de decodificação</td>
+</tr>
+<tr>
+<td>INVALID_CALL</td>
+<td>10</td>
+<td>Chamada inválida</td>
+</tr>
+<tr>
+<td>INVALID_PARAMETER</td>
+<td>11</td>
+<td>Parâmetro inválido</td>
+</tr>
+<tr>
+<td>TIME_OUT</td>
+<td>12</td>
+<td>Time out</td>
+</tr>
+<tr>
+<td>OPERATION_CANCELLED_BY_USER</td>
+<td>13</td>
+<td>Operação cancelada pelo usuário</td>
+</tr>
+<tr>
+<td>NOT_OPEN</td>
+<td>15</td>
+<td>Comando OPN não enviado</td>
+</tr>
+<tr>
+<td>PARAMETER_NOT_FOUND</td>
+<td>19</td>
+<td>Falta de um parâmetro mandatório</td>
+</tr>
+<tr>
+<td>DIFFERENT_TABLES_EMV</td>
+<td>20</td>
+<td>Tabelas AID e CAPK diferentes</td>
+</tr>
+<tr>
+<td>TABLES_UPLOAD_ERROR</td>
+<td>21</td>
+<td>Erro na carga de tabelas</td>
+</tr>
+<tr>
+<td>PINPAD_INTERNAL_ERROR</td>
+<td>40</td>
+<td>Erro interno do Pinpad</td>
+</tr>
+<tr>
+<td>MAGNETIC_CARD_ERROR</td>
+<td>41</td>
+<td>Erro na leitura da tarja</td>
+</tr>
+<tr>
+<td>MK_DUKPT_NOT_FOUND</td>
+<td>42</td>
+<td>DUKPT não encontrada</td>
+</tr>
+<tr>
+<td>NO_ICC_PRESENCE</td>
+<td>43</td>
+<td>Não há presença de ICC</td>
+</tr>
+<tr>
+<td>PINPAD_CANT_PROCESS_PIN_CAPTURE</td>
+<td>44</td>
+<td>O pinpad não conseguiu processar a captura da senha</td>
+</tr>
+<tr>
+<td>RESPONSE_DATA_LIMIT_EXCEEDED</td>
+<td>45</td>
+<td>Resposta excedeu o limite de informações</td>
+</tr>
+<tr>
+<td>SAM_NOT_FOUND</td>
+<td>51</td>
+<td>SAM não encontrado</td>
+</tr>
+<tr>
+<td>ICC_NOT_FOUND</td>
+<td>60</td>
+<td>ICC não encontrado</td>
+</tr>
+<tr>
+<td>COMMUNICATION_ICC_OR_CTLS_ERROR</td>
+<td>61</td>
+<td>Erro de comunicação ICC ou CTLS</td>
+</tr>
+<tr>
+<td>INVALID_CARD</td>
+<td>67</td>
+<td>Cartão inválido</td>
+</tr>
+<tr>
+<td>ICC_WITH_PROBLEM</td>
+<td>68</td>
+<td>Problemas no ICC</td>
+</tr>
+<tr>
+<td>INVALID_DATAS_IN_ICC</td>
+<td>69</td>
+<td>Informações inválidas no ICC</td>
+</tr>
+</tbody></table>
+<h2 id='status-do-provider'>Status do Provider</h2>
+<table><thead>
+<tr>
+<th>Nome</th>
+<th>Solução</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CONNECTION_NOT_FOUND</td>
+<td>Sem conexão com a internet, ligue a internet</td>
+</tr>
+<tr>
+<td>DEVICE_NOT_COMPATIBLE</td>
+<td>Dispositivo bluetooth não possui a biblioteca compartilhada</td>
+</tr>
+<tr>
+<td>UNEXPECTED_STATUS_COMMAND</td>
+<td>Status de um comando inexperado, tente novamente</td>
+</tr>
+<tr>
+<td>GENERIC_ERROR</td>
+<td>Um erro genérico</td>
+</tr>
+<tr>
+<td>IO_ERROR_WITH_PINPAD</td>
+<td>Erro de leitura e escrita com o Pinpad</td>
+</tr>
+<tr>
+<td>PINPAD_CONNECTION_NOT_FOUND</td>
+<td>Sem conexão com um Pinpad, conecte-se com um dispositivo</td>
+</tr>
+<tr>
+<td>NO_ACTIVE_APPLICATION</td>
+<td>SDK não foi ativada. Chame o ActiveApplicationProvider</td>
+</tr>
+<tr>
+<td>TABLES_NOT_FOUND</td>
+<td>Tabelas AID e CAPK não encontradas, chame o DownloadTablesProvider</td>
+</tr>
+<tr>
+<td>UNKNOWN_TYPE_OF_USER</td>
+<td>Um tipo de usuário desconhecido, Usuário final ou Desenvolvedor (User ou Partner)</td>
+</tr>
+<tr>
+<td>INVALID_AMOUNT</td>
+<td>Valor inválido para passar a transação</td>
+</tr>
+<tr>
+<td>NEED_LOAD_TABLES</td>
+<td>Chame o LoadTablesProvider para realizar a carga de tabelas</td>
+</tr>
+<tr>
+<td>TIME_OUT</td>
+<td>Time out, tente novamente</td>
+</tr>
+<tr>
+<td>OPERATION_CANCELLED_BY_USER</td>
+<td>Operação cancelada pelo usuário, provavelmente o botão X foi pressionado</td>
+</tr>
+<tr>
+<td>CARD_REMOVED_BY_USER</td>
+<td>Cartão removido pelo usuário indevidamente</td>
+</tr>
+<tr>
+<td>CANT_READ_CARD_HOLDER_INFORMATION</td>
+<td>Erro na leitura das informações do cartão, tente novamente</td>
+</tr>
+<tr>
+<td>INVALID_TRANSACTION</td>
+<td>Transação inválida, talvez um cartão de crédito esteja passando uma transação de débito, ou vice-versa.</td>
+</tr>
+<tr>
+<td>PASS_TARGE_WITH_CHIP</td>
+<td>Cartão de chip passou tarja</td>
+</tr>
+<tr>
+<td>NULL_RESPONSE</td>
+<td>Não houve resposta do Pinpad</td>
+</tr>
+<tr>
+<td>ERROR_RESPONSE_COMMAND</td>
+<td>Erro na resposta do comando</td>
+</tr>
+<tr>
+<td>ACCEPTOR_REJECTION</td>
+<td>Transação rejeitada pelo autorizador</td>
+</tr>
+<tr>
+<td>EMAIL_MESSAGE_ERROR</td>
+<td>Erro no envio do email</td>
+</tr>
+<tr>
+<td>INVALID_EMAIL_CLIENT</td>
+<td>Email do cliente é inválido</td>
+</tr>
+<tr>
+<td>INVALID_STONE_CODE_OR_UNKNOWN</td>
+<td>StoneCode foi digitado de forma errada ou não existe</td>
+</tr>
+<tr>
+<td>TRANSACTION_NOT_FOUND</td>
+<td>Não se pode cancelar uma transação que não foi aprovada</td>
+</tr>
+</tbody></table>
+<h1 id='usurios-e-desenvolvedores'>Usuários e desenvolvedores</h1><pre><code class="highlight java"><span class="c1">// no início do seu projeto</span>
+<span class="n">UserModel</span> <span class="n">userModel</span> <span class="o">=</span> <span class="n">StoneStart</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="n">SUA_ACTIVITY_AQUI</span><span class="o">);</span>
+
+<span class="c1">// diz que é um desenvolvedor com essas duas linhas de código</span>
+<span class="n">Partner</span> <span class="n">partnerDeveloper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Partner</span><span class="o">(</span><span class="n">userModel</span><span class="o">);</span>
+<span class="n">GlobalInformations</span><span class="o">.</span><span class="na">sessionApplication</span><span class="o">.</span><span class="na">setUserModel</span><span class="o">(</span><span class="n">partnerDeveloper</span><span class="o">);</span>
+</code></pre>
+
+<p>Umas das novidades da SDK 2.0 é que agora quando você chama a StoneStart.init no início do seu projeto e iniciar o projeto como parceiro (Partner), esse é um perfil que roda na sessão da SDK. Isso permite que ao passar uma transação ou executar um cancelamento, aponte para os ambientes de testes da Stone (a troca de endpoint é feita dentro da própria SDK, o desenvolvedor parceiro não precisa se preocupar em trocar os endpoints).</p>
+
+<aside class="warning"><strong>IMPORTANTE:</strong> Não esqueça de colocar este código APENAS na sua build de debug, NUNCA suba o seu código com esse modo em produção.</aside>
 
       </div>
       <div class="dark-box">
