@@ -1,5 +1,8 @@
-SDK e código de exemplo
-=======================
+# [DEPRECATED] SDK legacy
 
-<i>Toda a documentação de ingração pode ser encontrada <a href="http://stone-pagamentos.github.io/sdk-android/#introduo">aqui</a>!</i>
 
+### About
+Application written in Eclipse to integrate with `Android Payment API` using android `Bundle`
+
+### Deprecated
+This solution was deprecated. Instance use this solution, learn more about the [Payment SDK V2](https://github.com/stone-payments/sdk-android)

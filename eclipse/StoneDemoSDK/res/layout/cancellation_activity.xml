@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/arnTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:text="ARN: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/caTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/arnTextView"
+        android:layout_below="@+id/arnTextView"
+        android:layout_marginTop="30dp"
+        android:text="CA: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/arnEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/arnTextView"
+        android:layout_alignBottom="@+id/arnTextView"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/arnTextView"
+        android:ems="10"
+        android:inputType="numberDecimal" >
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/caEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/caTextView"
+        android:layout_alignBottom="@+id/caTextView"
+        android:layout_alignLeft="@+id/arnEditText"
+        android:layout_alignRight="@+id/arnEditText"
+        android:ems="10"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/caTextView"
+        android:layout_alignRight="@+id/caEditText"
+        android:layout_below="@+id/caEditText"
+        android:layout_marginTop="34dp"
+        android:text="ENVIAR" />
+
+</RelativeLayout>
